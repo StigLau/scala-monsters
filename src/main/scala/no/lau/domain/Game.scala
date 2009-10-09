@@ -1,17 +1,18 @@
 package no.lau.domain
 
-case class Game(boardSize:int) {
+
+case class Game(boardSize: int) {
   val rnd = new scala.util.Random
   val gameBoard = new Array[Array[Any]](boardSize, boardSize)
 
   //This code does currently not actually pic a free cell, and should be fixed accordingly 
   def getRandomFreeCell() = {
-    val range = 0 to boardSize -1
+    val range = 0 to boardSize - 1
     (rnd.nextInt(range length), rnd.nextInt(range length))
   }
 
-  def addRandomly(any:Any) {
-    val ran:Tuple2[Int, Int] = getRandomFreeCell()
+  def addRandomly(any: Any) {
+    val ran: Tuple2[Int, Int] = getRandomFreeCell()
     gameBoard(ran._1)(ran._2) = any
   }
 
@@ -34,8 +35,23 @@ class GamePiece
 case class Player(name: String) extends GamePiece {
   //Print only 1. letter in name
   override def toString = name.substring(0, 1)
+
+  def move(direction:Any) {
+    direction match {
+      case Direction.Up => println("up")
+      case Direction.Right => println("right")
+      case _ => None
+    }
+  }
 }
 
 case class Monster() extends GamePiece {override def toString = "H"}
 
 case class Wall() extends GamePiece {override def toString = "W"}
+
+object Direction extends Enumeration {
+    val Up = Value("UP")
+    val Down = Value("DOWN")
+    val Right = Value("RIGHT")
+    val Left = Value("LEft")
+}

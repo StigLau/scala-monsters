@@ -5,7 +5,7 @@ object GameTest {
   def main(args: Array[String]) {
     val game = Game(30)
 
-    1 to 120 foreach { arg => game.addRandomly(Wall()) }
+    1 to 240 foreach { arg => game.addRandomly(Wall()) }
     1 to 4 foreach { arg => game.addRandomly(Monster()) }
 
     val playerLeif = Player("Leif")
@@ -14,6 +14,10 @@ object GameTest {
     game.addRandomly(playerLeif)
 
     game.printBoard()
+
+    println(playerLeif.move(Direction.Up))
+    println(playerLeif.move(Direction.Right))
+
     "Game ended"
   }
 }
