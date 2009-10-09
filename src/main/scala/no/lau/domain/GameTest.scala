@@ -5,12 +5,19 @@ object GameTest {
   def main(args: Array[String]) {
     val playerLeif = Player("Leif")
     val playerKurt = Player("Kurt")
-    val monsterGunnar = Monster
-    val monsterRonny = Monster
+    val monsterGunnar = Monster()
+    val monsterRonny = Monster()
 
-    val gameBoard = List(List())
+    val game = Game(16, List(playerKurt, playerLeif))
+
+    0 to 30 foreach { arg => game.addRandomly(Wall()) }
     
-    Game(List(playerKurt, playerLeif), gameBoard)
-    println ("finished")
+    game.addRandomly(monsterGunnar)
+    game.addRandomly(monsterRonny)
+    game.addRandomly(playerKurt)
+    game.addRandomly(playerLeif)
+    
+    game.printBoard()
+    "Game ended"
   }
 }
