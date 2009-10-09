@@ -4,38 +4,19 @@
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>no.lau.sound-book</groupId>
-    <artifactId>graph-gui-scala</artifactId>
+    <groupId>no.lau.games</groupId>
+    <artifactId>scala-monster</artifactId>
     <version>0.1</version>
     <packaging>jar</packaging>
 
-    <name>Sound Book</name>
-    <description>This app rocks!</description>
-
-    <url>http://localhost:8080</url>
-    <organization>
-        <name>Lau.no</name>
-        <url>http://stig.lau.no</url>
-    </organization>
+    <name>Scala Monster - The game</name>
+    <description>Squeeze them monsters</description>
 
     <properties>
         <scala.version>2.7.4</scala.version>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>net.sf</groupId>
-            <artifactId>jgraphx</artifactId>
-            <version>1.0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>5.8</version>
-            <classifier>jdk15</classifier>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -51,26 +32,6 @@
             <artifactId>scala-swing</artifactId>
             <version>${scala.version}</version>
         </dependency>
-
-
-        <!-- KPRO dependencies -->
-        <dependency>
-            <groupId>no.bouvet.kpro</groupId>
-            <artifactId>model</artifactId>
-            <version>0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>no.bouvet.kpro</groupId>
-            <artifactId>renderer</artifactId>
-            <version>0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>no.bouvet.kpro</groupId>
-            <artifactId>renderer.audio</artifactId>
-            <version>0.2</version>
-        </dependency>
-
-
     </dependencies>
 
     <repositories>
@@ -78,16 +39,6 @@
             <id>scala-tools.org</id>
             <name>Scala-tools Maven2 Repository</name>
             <url>http://scala-tools.org/repo-releases</url>
-        </repository>
-        <repository>
-            <id>KPRO 09 Main repo</id>
-            <url>http://kpro09.googlecode.com/svn/maven-repository</url>
-            <releases/>
-        </repository>
-        <repository>
-            <id>KPRO 09 snapshot repo</id>
-            <url>http://kpro09.googlecode.com/svn/maven-snapshot-repository</url>
-            <snapshots/>
         </repository>
     </repositories>
 
