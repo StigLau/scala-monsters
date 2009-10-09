@@ -3,7 +3,7 @@ package no.lau.domain
 
 object GameTest {
   def main(args: Array[String]) {
-    val game = Game(30, List(playerKurt, playerLeif))
+    val game = Game(30)
 
     1 to 120 foreach { arg => game.addRandomly(Wall()) }
     1 to 4 foreach { arg => game.addRandomly(Monster()) }

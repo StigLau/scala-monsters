@@ -1,6 +1,6 @@
 package no.lau.domain
 
-case class Game(boardSize:int, players: List[Player]) {
+case class Game(boardSize:int) {
   val rnd = new scala.util.Random
   val gameBoard = new Array[Array[Any]](boardSize, boardSize)
 
