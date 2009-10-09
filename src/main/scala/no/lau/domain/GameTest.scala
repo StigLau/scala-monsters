@@ -3,20 +3,16 @@ package no.lau.domain
 
 object GameTest {
   def main(args: Array[String]) {
+    val game = Game(30, List(playerKurt, playerLeif))
+
+    1 to 120 foreach { arg => game.addRandomly(Wall()) }
+    1 to 4 foreach { arg => game.addRandomly(Monster()) }
+
     val playerLeif = Player("Leif")
     val playerKurt = Player("Kurt")
-    val monsterGunnar = Monster()
-    val monsterRonny = Monster()
-
-    val game = Game(16, List(playerKurt, playerLeif))
-
-    0 to 30 foreach { arg => game.addRandomly(Wall()) }
-    
-    game.addRandomly(monsterGunnar)
-    game.addRandomly(monsterRonny)
     game.addRandomly(playerKurt)
     game.addRandomly(playerLeif)
-    
+
     game.printBoard()
     "Game ended"
   }

@@ -9,3 +9,9 @@ Game ends when all opponents/monsters are squished.
 The game is envisioned to be hub'n'spoke, where the server manages the games legal state, and the clients are concerned with providing the GUI for displaying the game board, moving pieces, or providing headless monsters.
 
  -Stig,
+
+
+Read more:
+http://en.wikipedia.org/wiki/Beast_(video_game)
+http://www.identicalsoftware.com/ogs/2000/beasts.html
+http://twistedmatrix.com/users/acapnotic/wares/code/beasts/

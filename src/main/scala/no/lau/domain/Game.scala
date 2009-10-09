@@ -4,6 +4,7 @@ case class Game(boardSize:int, players: List[Player]) {
   val rnd = new scala.util.Random
   val gameBoard = new Array[Array[Any]](boardSize, boardSize)
 
+  //This code does currently not actually pic a free cell, and should be fixed accordingly 
   def getRandomFreeCell() = {
     val range = 0 to boardSize -1
     (rnd.nextInt(range length), rnd.nextInt(range length))
