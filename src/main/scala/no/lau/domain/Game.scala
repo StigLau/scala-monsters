@@ -45,11 +45,12 @@ trait Movable {
    **/
   def move(direction:Direction.Value) {
     import Direction.{Up, Down, Left, Right}
+    println(this + " moving " + direction); 
     location = direction match {
-      case Up => println(this + " going " + direction); (location._1, location._2 + 1)
-      case Right => println(this + " going " + direction); (location._1 + 1, location._2 )
-      case Down => println(this + " going " + direction); (location._1, location._2 - 1)
-      case Left => println(this + " going " + direction); (location._1 - 1, location._2 )
+      case Up => (location._1, location._2 + 1)
+      case Right => (location._1 + 1, location._2 )
+      case Down => (location._1, location._2 - 1)
+      case Left => (location._1 - 1, location._2 )
     }
   }
   def whereAreYou = location
