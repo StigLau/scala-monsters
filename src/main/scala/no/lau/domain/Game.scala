@@ -1,19 +1,20 @@
 package no.lau.domain
 
-
-case class Game(boardSize: int) {
+case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
-  val gameBoard = new Array[Array[Any]](boardSize, boardSize)
+  val gameBoard = new Array[Array[Any]](boardSizeX, boardSizeY)
 
-  //This code does currently not actually pic a free cell, and should be fixed accordingly 
-  def getRandomFreeCell() = {
-    val range = 0 to boardSize - 1
-    (rnd.nextInt(range length), rnd.nextInt(range length))
-  }
+  //This code does currently not actually pic a free cell, and should be fixed accordingly
+  def getRandomFreeCell() = getRandomCell()
 
-  def addRandomly(any: Any) {
-    val ran: Tuple2[Int, Int] = getRandomFreeCell()
-    gameBoard(ran._1)(ran._2) = any
+  def getRandomCell():Tuple2[Int, Int] =
+    (rnd.nextInt((0 to boardSizeX - 1) length), rnd.nextInt((0 to boardSizeY - 1) length))
+
+
+  def addRandomly(gamePiece: GamePiece) = {
+    val placement: Tuple2[Int, Int] = getRandomFreeCell()
+    gameBoard(placement._1)(placement._2) = gamePiece
+    gamePiece
   }
 
   def printBoard() {
@@ -32,22 +33,40 @@ case class Game(boardSize: int) {
 
 class GamePiece
 
+trait Movable {
+  //Todo find a better initial value, None:Int or something!
+  protected var location:Tuple2[Int, Int] = (-1, -1)
+
+  /**
+   * Moving in a direction should have a callback to inform that the procedure could not be done in a tick.
+   * By doing this, the server can stack up movement, and the client can give a route to follow before in time.
+   * If the route ends up in an illegal move at one stage, the rest of the movement will be dropped and the client informed.
+   * The callback should be implemented as a closure (?)
+   **/
+  def move(direction:Direction.Value) {
+    import Direction.{Up, Down, Left, Right}
+    location = direction match {
+      case Up => println(this + " going up"); (location._1, location._2 + 1)
+      case Right => println(this + " going right"); (location._1 + 1, location._2 )
+      case Down => println(this + " going down"); (location._1, location._2 - 1)
+      case Left => println(this + " going Left"); (location._1 - 1, location._2 )
+    }
+  }
+  def whereAreYou = location
+}
+
 case class Player(name: String) extends GamePiece {
   //Print only 1. letter in name
   override def toString = name.substring(0, 1)
-
-  def move(direction:Any) {
-    direction match {
-      case Direction.Up => println("up")
-      case Direction.Right => println("right")
-      case _ => None
-    }
-  }
 }
 
-case class Monster() extends GamePiece {override def toString = "H"}
+abstract class Monster() extends GamePiece with Movable {
+  override def toString = "H"
+}
 
-case class Wall() extends GamePiece {override def toString = "W"}
+case class Block() extends GamePiece {override def toString = "W"}
+
+case class StaticWall() extends GamePiece {override def toString = ""}
 
 object Direction extends Enumeration {
     val Up = Value("UP")
