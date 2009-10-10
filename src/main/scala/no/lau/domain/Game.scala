@@ -46,13 +46,20 @@ trait Movable {
   def move(direction:Direction.Value) {
     import Direction.{Up, Down, Left, Right}
     location = direction match {
-      case Up => println(this + " going up"); (location._1, location._2 + 1)
-      case Right => println(this + " going right"); (location._1 + 1, location._2 )
-      case Down => println(this + " going down"); (location._1, location._2 - 1)
-      case Left => println(this + " going Left"); (location._1 - 1, location._2 )
+      case Up => println(this + " going " + direction); (location._1, location._2 + 1)
+      case Right => println(this + " going " + direction); (location._1 + 1, location._2 )
+      case Down => println(this + " going " + direction); (location._1, location._2 - 1)
+      case Left => println(this + " going " + direction); (location._1 - 1, location._2 )
     }
   }
   def whereAreYou = location
+}
+
+object Direction extends Enumeration {
+    val Up = Value("UP")
+    val Down = Value("DOWN")
+    val Right = Value("RIGHT")
+    val Left = Value("LEFT")
 }
 
 case class Player(name: String) extends GamePiece {
@@ -67,10 +74,3 @@ abstract class Monster() extends GamePiece with Movable {
 case class Block() extends GamePiece {override def toString = "W"}
 
 case class StaticWall() extends GamePiece {override def toString = ""}
-
-object Direction extends Enumeration {
-    val Up = Value("UP")
-    val Down = Value("DOWN")
-    val Right = Value("RIGHT")
-    val Left = Value("LEft")
-}
