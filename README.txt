@@ -15,3 +15,11 @@ Read more:
 http://en.wikipedia.org/wiki/Beast_(video_game)
 http://www.identicalsoftware.com/ogs/2000/beasts.html
 http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
+
+
+Todo create movement of movables 
+ * fix movement of movables to be reflected in gameBoard
+ * if the space the gamepiece is moving towards already is occupied by a movable, the occupying movable should do a cascading move
+ * If the cascading move places the gameboard in an illegal state, all the moves must be undone
+ * and a callback is sent to the client who issued the move
+

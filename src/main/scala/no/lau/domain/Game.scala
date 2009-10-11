@@ -2,10 +2,11 @@ package no.lau.domain
 
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
-  val gameBoard = new Array[Array[Any]](boardSizeX, boardSizeY)
+  //todo new gameBoard should only contain None's
+  val gameBoard = new Array[Array[GamePiece]](boardSizeX, boardSizeY)
 
   //This code does currently not actually pic a free cell, and should be fixed accordingly
-  def getRandomFreeCell() = getRandomCell()
+  def getRandomFreeCell() = getRandomCell
 
   def getRandomCell():Tuple2[Int, Int] =
     (rnd.nextInt((0 to boardSizeX - 1) length), rnd.nextInt((0 to boardSizeY - 1) length))
@@ -14,16 +15,36 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   def addRandomly(gamePiece: GamePiece) = {
     val placement: Tuple2[Int, Int] = getRandomFreeCell()
     gameBoard(placement._1)(placement._2) = gamePiece
-    gamePiece
   }
 
+  def getPieceAt(location:Tuple2[Int, Int]):GamePiece = {
+    gameBoard(location._1)(location._2)
+  }
+
+  /**
+   * Used by find where gamepieces are located on the map
+   * todo this search can be done muuuuuch better!!!
+   * or create a better representation for the data, and still print it out as a table
+   */
+  def whereIs(gamePiece:GamePiece):Tuple2[Int, Int] = {
+    for (column <- 0 to boardSizeY -1) {
+      for (row <- 0 to boardSizeX -1) {
+        if(gameBoard(row)(column) == gamePiece) {
+          return (row, column)
+        }
+      }
+    }
+    return (-1, -1)
+  }
+
+  //todo The printing of the board is oriented wrong Y-axis :)
   def printBoard() {
-    for (column <- gameBoard) {
-      for (cell <- column) {
-        print(cell match {
-          case player: GamePiece => player
+    for (column <- 0 to boardSizeY -1) {
+      for (row <- 0 to boardSizeX -1) {
+        print(gameBoard(row)(column) match {
+          case gamePiece: GamePiece => gamePiece
           case null => " "
-          case _ => None
+          //case _ => None
         })
       }
       print("\n")
@@ -31,11 +52,11 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   }
 }
 
-class GamePiece
-
-trait Movable {
-  //Todo find a better initial value, None:Int or something!
-  protected var location:Tuple2[Int, Int] = (-1, -1)
+abstract class GamePiece 
+//todo gamepieces should not themselves know where they are, the gameboard should!
+trait Movable extends GamePiece {
+  val game:Game
+  
 
   /**
    * Moving in a direction should have a callback to inform that the procedure could not be done in a tick.
@@ -45,17 +66,27 @@ trait Movable {
    **/
   def move(direction:Direction.Value) {
     import Direction.{Up, Down, Left, Right}
-    println(this + " moving " + direction); 
-    location = direction match {
-      case Up => (location._1, location._2 + 1)
-      case Right => (location._1 + 1, location._2 )
-      case Down => (location._1, location._2 - 1)
-      case Left => (location._1 - 1, location._2 )
+    println(this + " moving " + direction);
+    val oldLocation = game.whereIs(this)
+    val newLocation = direction match {
+      case Up => (oldLocation._1, oldLocation._2 + 1)
+      case Right => (oldLocation._1 + 1, oldLocation._2 )
+      case Down => (oldLocation._1, oldLocation._2 - 1)
+      case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
-  }
-  def whereAreYou = location
-}
+    println("Found " + game.getPieceAt(newLocation))
+    game.getPieceAt(newLocation) match {
+      case movable:Movable => movable.move(direction)
+      case gamePiece:GamePiece => throw new IllegalMoveException
+      case null => println("Moving to open square; continue!")
+    }
 
+    game.gameBoard(oldLocation._1)(oldLocation._2) = null
+    game.gameBoard(newLocation._1)(newLocation._2) = this
+  }
+  def whereAreYou = game.whereIs(this)
+}
+// Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {
     val Up = Value("UP")
     val Down = Value("DOWN")
@@ -64,14 +95,16 @@ object Direction extends Enumeration {
 }
 
 case class Player(name: String) extends GamePiece {
-  //Print only 1. letter in name
+  //Print only first letter in name
   override def toString = name.substring(0, 1)
 }
 
-abstract class Monster() extends GamePiece with Movable {
+case class Monster(game:Game) extends Movable {
   override def toString = "H"
 }
 
-case class Block() extends GamePiece {override def toString = "W"}
+case class Block(game:Game) extends Movable {override def toString = "W"}
 
 case class StaticWall() extends GamePiece {override def toString = ""}
+
+class IllegalMoveException extends Exception

@@ -10,7 +10,7 @@ object GameTest {
   def main(args: Array[String]) {
     val game = Game(20, 40)
 
-    1 to 240 foreach { arg => game.addRandomly(Block()) }
+    1 to 240 foreach {arg => game.addRandomly(Block(game))}
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
 
 
@@ -24,14 +24,33 @@ object GameTest {
     //playerLeif.move(Direction.Up)
     //playerLeif.move(Direction.Right)
 
-    val monsterGunnar = new Monster() {
-      location = (1, 1)
-    }
+    val monsterGunnar = new Monster(game)
 
     println(monsterGunnar whereAreYou)
-    monsterGunnar move(Up)
-    monsterGunnar move(Right)
+    monsterGunnar move (Up)
+    monsterGunnar move (Right)
     println(monsterGunnar whereAreYou)
     "Game ended"
+  }
+}
+
+object CascadingMovementTest {
+  def main(args: Array[String]) {
+
+    val game = new Game(4, 4) {
+      gameBoard(0)(1) = Block(this)
+      gameBoard(1)(1) = Block(this)
+      gameBoard(2)(1) = Block(this)
+    }
+
+    val leif = new Monster(game) {
+      game.gameBoard(1)(0) = this
+    }
+
+    println("He is " + game.whereIs(leif))
+
+    game printBoard()
+    leif move(Up)
+    game printBoard()
   }
 }
