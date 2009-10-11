@@ -37,11 +37,10 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     throw new RuntimeException("Could not find gamePiece. The piece is probably not on the board. This is not the correct way of handling this problem, as pieces can be removed from the playboard after beeing squeezed")
   }
 
-  //todo The printing of the board is oriented wrong Y-axis :)
   def printBoard() {
     for (column <- 0 to boardSizeY -1) {
       for (row <- 0 to boardSizeX -1) {
-        print(gameBoard(row)(column) match {
+        print(gameBoard(row)((boardSizeY - 1) - column) match {
           case gamePiece: GamePiece => gamePiece
           case null => " "
           //case _ => None
@@ -100,12 +99,10 @@ case class Player(name: String) extends GamePiece {
   override def toString = name.substring(0, 1)
 }
 
-case class Monster(game:Game) extends Movable {
-  override def toString = "H"
-}
+case class Monster(game:Game) extends Movable { override def toString = "H" }
 
-case class Block(game:Game) extends Movable {override def toString = "W"}
+case class Block(game:Game) extends Movable {override def toString = "B"}
 
-case class StaticWall() extends GamePiece {override def toString = ""}
+case class StaticWall() extends GamePiece {override def toString = "W"}
 
 class IllegalMoveException extends Exception
