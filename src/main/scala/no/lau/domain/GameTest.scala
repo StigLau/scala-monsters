@@ -30,15 +30,14 @@ object GameTest {
     monsterGunnar move (Up)
     monsterGunnar move (Right)
     println(monsterGunnar whereAreYou)
-    "Game ended"
+    println("Game ended")
   }
 }
 
 object CascadingMovementTest {
   def main(args: Array[String]) {
-
     val game = new Game(4, 4) {
-      gameBoard(0)(1) = Block(this)
+      //gameBoard(0)(1) = Block(this)
       gameBoard(1)(1) = Block(this)
       gameBoard(2)(1) = Block(this)
     }
@@ -47,10 +46,15 @@ object CascadingMovementTest {
       game.gameBoard(1)(0) = this
     }
 
-    println("He is " + game.whereIs(leif))
-
     game printBoard()
     leif move(Up)
+    game printBoard()
+
+    leif move(Right)
+    game printBoard()
+    leif move(Up)
+    game printBoard()
+    leif move(Left)
     game printBoard()
   }
 }

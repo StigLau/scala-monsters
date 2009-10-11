@@ -34,7 +34,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
         }
       }
     }
-    return (-1, -1)
+    throw new RuntimeException("Could not find gamePiece. The piece is probably not on the board. This is not the correct way of handling this problem, as pieces can be removed from the playboard after beeing squeezed")
   }
 
   //todo The printing of the board is oriented wrong Y-axis :)
@@ -74,16 +74,17 @@ trait Movable extends GamePiece {
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
-    println("Found " + game.getPieceAt(newLocation))
+    println(this + " found " + game.getPieceAt(newLocation) + " at " + newLocation)
     game.getPieceAt(newLocation) match {
       case movable:Movable => movable.move(direction)
       case gamePiece:GamePiece => throw new IllegalMoveException
-      case null => println("Moving to open square; continue!")
+      case null => println("Open square; continue!")
     }
-
+    println(this + " moved from " + oldLocation + " to " + newLocation)
     game.gameBoard(oldLocation._1)(oldLocation._2) = null
     game.gameBoard(newLocation._1)(newLocation._2) = this
   }
+
   def whereAreYou = game.whereIs(this)
 }
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
