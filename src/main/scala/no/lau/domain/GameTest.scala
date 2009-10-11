@@ -14,10 +14,10 @@ object GameTest {
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
 
 
-    val playerLeif = Player("Leif")
-    val playerKurt = Player("Kurt")
-    game.addRandomly(playerKurt)
-    game.addRandomly(playerLeif)
+    //val playerLeif =  Player("Leif")
+    //val playerKurt = Player("Kurt")
+    //game.addRandomly(playerKurt)
+    //game.addRandomly(playerLeif)
 
     game.printBoard()
 
@@ -37,25 +37,24 @@ object GameTest {
 //Something fishy happening on the last move!
 object CascadingMovementTest {
   def main(args: Array[String]) {
-    val game = new Game(3, 3) {
-      //gameBoard(0)(1) = Block(this)
-      gameBoard(1)(1) = Block(this)
-      gameBoard(2)(1) = Block(this)
+    val game1 = new Game(3, 3) {
+      gameBoard += (0, 1) -> StaticWall()
+      gameBoard += (1, 1) -> Block(this)
+      gameBoard += (2, 1) -> Block(this)
     }
 
-    val leif = new Monster(game) {
-      game.gameBoard(1)(0) = this
+    val leif = new Monster(game1) {
+      game.gameBoard += (1, 0) -> this
     }
 
-    game printBoard()
+    game1 printBoard()
     leif move(Up)
-    game printBoard()
-
+    game1 printBoard()
     leif move(Right)
-    game printBoard()
+    game1 printBoard()
     leif move(Up)
-    game printBoard()
+    game1 printBoard()
     leif move(Left)
-    game printBoard()
+    game1 printBoard()
   }
 }

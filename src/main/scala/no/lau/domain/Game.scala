@@ -6,9 +6,8 @@ package no.lau.domain
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
   //todo new gameBoard should only contain None's
-  val gameBoard = new Array[Array[GamePiece]](boardSizeX + 1, boardSizeY + 1)
-  //import scala.collection.immutable.HashMap
-  //private var gameBoard: Map[Tuple2[Int, Int], GamePiece] = new HashMap
+  import scala.collection.mutable.HashMap
+  val gameBoard = new HashMap[Tuple2[Int, Int], GamePiece]
 
   //This code does currently not actually pic a free cell, and should be fixed accordingly
   def getRandomFreeCell() = getRandomCell
@@ -17,14 +16,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
 
 
-  def addRandomly(gamePiece: GamePiece) = {
-    val placement: Tuple2[Int, Int] = getRandomFreeCell()
-    gameBoard(placement._1)(placement._2) = gamePiece
-  }
-
-  def getPieceAt(location:Tuple2[Int, Int]):GamePiece = {
-    gameBoard(location._1)(location._2)
-  }
+  def addRandomly(gamePiece: GamePiece) = gameBoard += getRandomFreeCell() -> gamePiece
 
   /**
    * Used by find where gamepieces are located on the map
@@ -32,22 +24,17 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
    * or create a better representation for the data, and still print it out as a table
    */
   def whereIs(gamePiece:GamePiece):Tuple2[Int, Int] = {
-    for (column <- 0 to boardSizeY) {
-      for (row <- 0 to boardSizeX) {
-        if(gameBoard(row)(column) == gamePiece) {
-          return (row, column)
-        }
-      }
-    }
-    throw new RuntimeException("Could not find gamePiece. The piece is probably not on the board. This is not the correct way of handling this problem, as pieces can be removed from the playboard after beeing squeezed")
+    val foundItAt:Int = gameBoard.values.indexOf(gamePiece)
+    gameBoard.keySet.toArray(foundItAt)
   }
 
   def printBoard() {
     for (column <- 0 to boardSizeY) {
       for (row <- 0 to boardSizeX) {
-        print(gameBoard(row)((boardSizeY) - column) match {
-          case gamePiece: GamePiece => gamePiece
-          case null => " "
+        //println (print(gameBoard.get(row, (boardSizeY) - column)))
+        print(gameBoard.get(row, (boardSizeY) - column) match {
+          case Some(gamePiece) => gamePiece
+          case None => "."
           //case _ => None
         })
       }
@@ -78,15 +65,18 @@ trait Movable extends GamePiece {
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
-    println(this + " found " + game.getPieceAt(newLocation) + " at " + newLocation)
-    game.getPieceAt(newLocation) match {
-      case movable:Movable => movable.move(direction)
-      case gamePiece:GamePiece => throw new IllegalMoveException
-      case null => println("Open square; continue!")
+    //println(this + " found " + game.gameBoard.get(newLocation) + " at " + newLocation)
+    //Is this the correct way to do this?
+    game.gameBoard.get(newLocation) match {
+      case Some(any) => any match {
+        case movable:Movable => movable.move(direction)
+        case gamePiece:GamePiece => throw new IllegalMoveException
+      }
+      case None => println(newLocation + " is free; continue!")
     }
     println(this + " moved from " + oldLocation + " to " + newLocation)
-    game.gameBoard(oldLocation._1)(oldLocation._2) = null
-    game.gameBoard(newLocation._1)(newLocation._2) = this
+    game.gameBoard -= oldLocation 
+    game.gameBoard += newLocation -> this
   }
 
   def whereAreYou = game.whereIs(this)
@@ -99,7 +89,7 @@ object Direction extends Enumeration {
     val Left = Value("LEFT")
 }
 
-case class Player(name: String) extends GamePiece {
+abstract class Player(name: String) extends Movable {
   //Print only first letter in name
   override def toString = name.substring(0, 1)
 }
