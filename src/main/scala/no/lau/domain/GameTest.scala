@@ -34,6 +34,7 @@ object GameTest {
   }
 }
 
+//Something fishy happening on the last move!
 object CascadingMovementTest {
   def main(args: Array[String]) {
     val game = new Game(4, 4) {
