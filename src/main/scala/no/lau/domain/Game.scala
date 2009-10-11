@@ -1,15 +1,20 @@
 package no.lau.domain
 
+/**
+ * BoardSize X and Y start from 0 to make computation easier to write :)
+ */
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
   //todo new gameBoard should only contain None's
-  val gameBoard = new Array[Array[GamePiece]](boardSizeX, boardSizeY)
+  val gameBoard = new Array[Array[GamePiece]](boardSizeX + 1, boardSizeY + 1)
+  //import scala.collection.immutable.HashMap
+  //private var gameBoard: Map[Tuple2[Int, Int], GamePiece] = new HashMap
 
   //This code does currently not actually pic a free cell, and should be fixed accordingly
   def getRandomFreeCell() = getRandomCell
 
   def getRandomCell():Tuple2[Int, Int] =
-    (rnd.nextInt((0 to boardSizeX - 1) length), rnd.nextInt((0 to boardSizeY - 1) length))
+    (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
 
 
   def addRandomly(gamePiece: GamePiece) = {
@@ -27,8 +32,8 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
    * or create a better representation for the data, and still print it out as a table
    */
   def whereIs(gamePiece:GamePiece):Tuple2[Int, Int] = {
-    for (column <- 0 to boardSizeY -1) {
-      for (row <- 0 to boardSizeX -1) {
+    for (column <- 0 to boardSizeY) {
+      for (row <- 0 to boardSizeX) {
         if(gameBoard(row)(column) == gamePiece) {
           return (row, column)
         }
@@ -38,9 +43,9 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   }
 
   def printBoard() {
-    for (column <- 0 to boardSizeY -1) {
-      for (row <- 0 to boardSizeX -1) {
-        print(gameBoard(row)((boardSizeY - 1) - column) match {
+    for (column <- 0 to boardSizeY) {
+      for (row <- 0 to boardSizeX) {
+        print(gameBoard(row)((boardSizeY) - column) match {
           case gamePiece: GamePiece => gamePiece
           case null => " "
           //case _ => None

@@ -37,7 +37,7 @@ object GameTest {
 //Something fishy happening on the last move!
 object CascadingMovementTest {
   def main(args: Array[String]) {
-    val game = new Game(4, 4) {
+    val game = new Game(3, 3) {
       //gameBoard(0)(1) = Block(this)
       gameBoard(1)(1) = Block(this)
       gameBoard(2)(1) = Block(this)
