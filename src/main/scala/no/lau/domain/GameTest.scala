@@ -6,12 +6,12 @@ import Direction.{Up, Down, Left, Right}
 /**
  * Test used for setting up and testing that the game holds together. 
  */
-/*
+
 object GameTest {
   def main(args: Array[String]) {
-    val game = Game(20, 40)
+    val game = Game(40, 25)
 
-    1 to 240 foreach {arg => game.addRandomly(Block(game))}
+    1 to 300 foreach {arg => game.addRandomly(Block(game))}
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
 
 
@@ -26,6 +26,7 @@ object GameTest {
     //playerLeif.move(Direction.Right)
 
     val monsterGunnar = new Monster(game)
+    game.addRandomly(monsterGunnar)
 
     println(monsterGunnar whereAreYou)
     monsterGunnar move (Up)
@@ -33,7 +34,7 @@ object GameTest {
     println(monsterGunnar whereAreYou)
     println("Game ended")
   }
-}        */
+}
 
 //Something fishy happening on the last move!
 object CascadingMovementTest {
