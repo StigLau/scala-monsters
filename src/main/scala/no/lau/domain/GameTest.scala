@@ -63,7 +63,7 @@ object CascadingMovementTest {
      * BH..
      * W..B
      * ....
-     * The Highlander syndrome was here!
+     * The Highlander syndrome was here, and eats up all my B's!
      */
   }
 }
