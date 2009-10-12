@@ -48,22 +48,22 @@ object CascadingMovementTest {
       game.gameBoard += (1, 0) -> this
     }
 
-    game1 printBoard()
-    leif move(Up)
-    game1 printBoard()
-    leif move(Right)
-    game1 printBoard()
-    leif move(Up)
-    game1 printBoard()
-    leif move(Left)
-    game1 printBoard()
+    game1 printBoard ()
+    leif move (Up)
+    game1 printBoard ()
+    leif move (Right)
+    game1 printBoard ()
+    leif move (Up)
+    game1 printBoard ()
+    leif move (Left)
+    game1 printBoard ()
 
-    /**
-     * Board end state should look like this:
-     * BH..
-     * W..B
-     * ....
-     * The Highlander syndrome was here, and eats up all my B's!
-     */
+
+    println("\n" +
+            "Board end state should look like this:\n" +
+            "BH..\n" +
+            "W..B\n" +
+            "....\n" +
+            "The Highlander syndrome was here, and eats up all my B's!")
   }
 }
