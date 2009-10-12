@@ -9,14 +9,21 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   import scala.collection.mutable.HashMap
   val gameBoard = new HashMap[Tuple2[Int, Int], GamePiece]
 
-  //This code does currently not actually pic a free cell, and should be fixed accordingly
-  def getRandomFreeCell() = getRandomCell
+  /**
+   * Simple algorithm for scattering out different objects.
+   * Can be very time consuming when free cells -> 0
+   * Got any better ways of doing this? :)
+   */
+  def findRandomFreeCell(): Tuple2[Int, Int] = {
+    val randomCell = (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
+    if (gameBoard.get(randomCell) isEmpty)
+      randomCell
+    else
+      findRandomFreeCell
+  }
 
-  def getRandomCell():Tuple2[Int, Int] =
-    (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
 
-
-  def addRandomly(gamePiece: GamePiece) = gameBoard += getRandomFreeCell() -> gamePiece
+  def addRandomly(gamePiece: GamePiece) = gameBoard += findRandomFreeCell() -> gamePiece
 
   /**
    * Used by find where gamepieces are located on the map
@@ -44,7 +51,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 trait GamePiece
 
 trait Movable extends GamePiece {
-  val game:Game
+  val game:Game //todo game should preferably be referenced some other way
   
 
   /**
