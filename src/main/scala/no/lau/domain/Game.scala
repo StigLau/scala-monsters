@@ -20,8 +20,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   /**
    * Used by find where gamepieces are located on the map
-   * todo this search can be done muuuuuch better!!!
-   * or create a better representation for the data, and still print it out as a table
+   * todo this search can be written muuuuuch better!!!
    */
   def whereIs(gamePiece:GamePiece):Tuple2[Int, Int] = {
     val foundItAt:Int = gameBoard.values.indexOf(gamePiece)
@@ -31,8 +30,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   def printBoard() {
     for (column <- 0 to boardSizeY) {
       for (row <- 0 to boardSizeX) {
-        //println (print(gameBoard.get(row, (boardSizeY) - column)))
-        print(gameBoard.get(row, (boardSizeY) - column) match {
+        print(gameBoard.get(row, boardSizeY - column) match {
           case Some(gamePiece) => gamePiece
           case None => "."
           //case _ => None
@@ -43,8 +41,8 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   }
 }
 
-abstract class GamePiece 
-//todo gamepieces should not themselves know where they are, the gameboard should!
+trait GamePiece
+
 trait Movable extends GamePiece {
   val game:Game
   
