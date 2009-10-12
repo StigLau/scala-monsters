@@ -6,6 +6,7 @@ import Direction.{Up, Down, Left, Right}
 /**
  * Test used for setting up and testing that the game holds together. 
  */
+/*
 object GameTest {
   def main(args: Array[String]) {
     val game = Game(20, 40)
@@ -32,12 +33,12 @@ object GameTest {
     println(monsterGunnar whereAreYou)
     println("Game ended")
   }
-}
+}        */
 
 //Something fishy happening on the last move!
 object CascadingMovementTest {
   def main(args: Array[String]) {
-    val game1 = new Game(3, 3) {
+    val game1 = new Game(3, 2) {
       gameBoard += (0, 1) -> StaticWall()
       gameBoard += (1, 1) -> Block(this)
       gameBoard += (2, 1) -> Block(this)
@@ -56,5 +57,13 @@ object CascadingMovementTest {
     game1 printBoard()
     leif move(Left)
     game1 printBoard()
+
+    /**
+     * Board end state should look like this:
+     * BH..
+     * W..B
+     * ....
+     * The Highlander syndrome was here!
+     */
   }
 }
