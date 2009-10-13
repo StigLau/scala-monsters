@@ -70,7 +70,6 @@ trait Movable extends GamePiece {
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
-    //println(this + " found " + game.gameBoard.get(newLocation) + " at " + newLocation)
     //Is this the correct way to do this?
     game.gameBoard.get(newLocation) match {
       case Some(any) => any match {
@@ -95,13 +94,15 @@ object Direction extends Enumeration {
 }
 
 abstract class Player(name: String) extends Movable {
-  //Print only first letter in name
+  //First letter in name
   override def toString = name.substring(0, 1)
 }
 
-case class Monster(game:Game) extends Movable { override def toString = "H" }
+case class Monster(game:Game, id:Any) extends Movable { override def toString = "H" }
 
-case class Block(game:Game) extends Movable {override def toString = "B"}
+case class Block(game:Game, id:Any) extends Movable {
+  override def toString = "B"
+}
 
 case class StaticWall() extends GamePiece {override def toString = "W"}
 
