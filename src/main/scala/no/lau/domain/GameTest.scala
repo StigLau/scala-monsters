@@ -25,7 +25,7 @@ object GameTest {
     //playerLeif.move(Direction.Up)
     //playerLeif.move(Direction.Right)
 
-    val monsterGunnar = new Monster(game)
+    val monsterGunnar = new Monster(game, "MonsterGunnar")
     game.addRandomly(monsterGunnar)
 
     println(monsterGunnar whereAreYou)
@@ -45,7 +45,7 @@ object CascadingMovementTest {
       gameBoard += (2, 1) -> Block(this, "b")
     }
 
-    val leif = new Monster(game1) {
+    val leif = new Monster(game1, "MonsterLeif") {
       game.gameBoard += (1, 0) -> this
     }
 
