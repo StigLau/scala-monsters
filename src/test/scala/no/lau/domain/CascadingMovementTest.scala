@@ -17,8 +17,12 @@ class CascadingMovementTest {
   @Test def cascadingMovementTest() {
     game printBoard ()
     leif move (Up)
+    assertEquals((1, 1), game.whereIs(leif))
+    assertEquals((1, 2), game.whereIs(Block(game, "a")))
     game printBoard ()
     leif move (Right)
+    assertEquals((2, 1), game.whereIs(leif))
+    assertEquals((3, 1), game.whereIs(Block(game, "b")))
     game printBoard ()
     leif move (Up)
     game printBoard ()
@@ -26,8 +30,6 @@ class CascadingMovementTest {
     game printBoard ()
     assertEquals((1, 2), game.whereIs(leif))
     assertEquals((0, 1), game.whereIs(StaticWall()))
-
     assertEquals((0, 2), game.whereIs(Block(game, "a")))
-    assertEquals((3, 1), game.whereIs(Block(game, "b")))
   }
 }
