@@ -66,7 +66,12 @@ trait Movable extends GamePiece {
     val oldLocation = game.whereIs(this)
     val newLocation = direction match {
       case Up => (oldLocation._1, oldLocation._2 + 1)
-      case Right => (oldLocation._1 + 1, oldLocation._2 )
+      case Right => {
+        if(oldLocation._1 >= game.boardSizeX)
+          throw new IllegalMoveException
+        else
+          (oldLocation._1 + 1, oldLocation._2 )
+      }
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
