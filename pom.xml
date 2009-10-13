@@ -13,7 +13,7 @@
     <description>Squeeze them monsters</description>
 
     <properties>
-        <scala.version>2.7.4</scala.version>
+        <scala.version>2.7.5</scala.version>
     </properties>
 
     <dependencies>
@@ -28,9 +28,20 @@
             <version>${scala.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-swing</artifactId>
-            <version>${scala.version}</version>
+            <groupId>org.scala-tools.testing</groupId>
+            <artifactId>specs</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-tools.testing</groupId>
+            <artifactId>scalatest</artifactId>
+            <version>0.9.5</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -44,6 +55,7 @@
 
     <build>
         <scriptSourceDirectory>src/main/scala</scriptSourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.scala-tools</groupId>
