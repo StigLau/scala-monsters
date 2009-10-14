@@ -20,7 +20,6 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
       findRandomFreeCell
   }
 
-
   def addRandomly(gamePiece: GamePiece) = gameBoard += findRandomFreeCell() -> gamePiece
 
   //Algorithm can take some time when nr of free cells --> 0
@@ -29,22 +28,14 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     gameBoard.keySet.toArray(foundItAt)
   }
 
-  def boardAsPrintable() {
-    for (column <- 0 to boardSizeY) {
-      for (row <- 0 to boardSizeX) {
-        print(gameBoard.get(row, boardSizeY - column) match {
-          case Some(gamePiece) => gamePiece
-          case None => "."
-        })
-      }
-      print("\n")
+  def boardAsPrintable() = {
+    val whole = for (y <- 0 to boardSizeY)
+    yield {
+      val row = for (x <- 0 to boardSizeX)
+      yield gameBoard.getOrElse((x, boardSizeY - y), ".")
+      row.foldLeft("\n")(_+_)
     }
-  }
-  //New implemented version. Perhaps more sexy but not yet functionable
-  def boardAsPrintableRange() = {
-    for (y <- 0 to boardSizeY)
-    yield for (x <- 0 to boardSizeX)
-    yield gameBoard.getOrElse((x, boardSizeY - y), ".")
+    whole.foldLeft("")(_+_)
   }
 }
 
@@ -52,7 +43,6 @@ trait GamePiece
 
 trait Movable extends GamePiece {
   val game:Game //todo game should preferably be referenced some other way
-
 
   /**
    * Used for moving gamepieces around the gameBoard
