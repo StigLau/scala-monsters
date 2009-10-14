@@ -28,7 +28,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     val foundItAt:Int = gameBoard.values.indexOf(gamePiece)
     gameBoard.keySet.toArray(foundItAt)
   }
-  //todo return table as string, as opposed to this function printing out each line
+
   def boardAsPrintable() {
     for (column <- 0 to boardSizeY) {
       for (row <- 0 to boardSizeX) {
@@ -39,6 +39,12 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
       }
       print("\n")
     }
+  }
+  //New implemented version. Perhaps more sexy but not yet functionable
+  def boardAsPrintableRange() = {
+    for (y <- 0 to boardSizeY)
+    yield for (x <- 0 to boardSizeX)
+    yield gameBoard.getOrElse((x, boardSizeY - y), ".")
   }
 }
 
