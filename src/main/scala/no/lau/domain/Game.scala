@@ -52,13 +52,11 @@ trait GamePiece
 
 trait Movable extends GamePiece {
   val game:Game //todo game should preferably be referenced some other way
-  
+
 
   /**
-   * Moving in a direction should have a callback to inform that the procedure could not be done in a tick.
-   * By doing this, the server can stack up movement, and the client can give a route to follow before in time.
-   * If the route ends up in an illegal move at one stage, the rest of the movement will be dropped and the client informed.
-   * The callback should be implemented as a closure (?)
+   * Used for moving gamepieces around the gameBoard
+   * If the route ends up in an illegal move at one stage, the movement will be dropped and an IllegalMovementException will be thrown
    **/
   def move(direction:Direction.Value) {
     import Direction.{Up, Down, Left, Right}
