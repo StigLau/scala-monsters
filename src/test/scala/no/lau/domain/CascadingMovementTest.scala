@@ -12,9 +12,7 @@ class CascadingMovementTest {
   val gameBoard = game.gameBoard
 
   @Test def monsterMovingBlocksTest() {
-    val leif = new Monster(game, "MonsterLeif") {
-      game.gameBoard += (1, 0) -> this
-    }
+    val leif = new Monster(game, "MonsterLeif") { game.gameBoard += (1, 0) -> this }
     game printBoard ()
     leif move (Up)
     assertEquals((1, 1), game.whereIs(leif))
@@ -33,9 +31,7 @@ class CascadingMovementTest {
   }
 
   @Test def cascadingMovementTest() {
-    val leif = new Monster(game, "MonsterLeif") {
-      game.gameBoard += (0, 1) -> this
-    }
+    val leif = new Monster(game, "MonsterLeif") { gameBoard += (0, 1) -> this }
     game printBoard ()
     leif move (Right)
     game printBoard ()
@@ -44,20 +40,23 @@ class CascadingMovementTest {
     assertEquals(Block(game, "b"), gameBoard(3, 1))
   }
   //Do something about the IllegalMoveException
-  @Test def erronousMovementOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") {
-      gameBoard += (0, 1) -> this
-    }
+  @Test def erronousMovementRightOverTheBoarder() {
+    val leif = new Monster(game, "MonsterLeif") { gameBoard += (0, 1) -> this }
     game printBoard()
     leif move (Right)
     leif move (Right)
   }
 
+  @Test def erronousMovementDownOverTheBoarder() {
+    val leif = new Monster(game, "MonsterLeif") { gameBoard += (1, 2) -> this }
+    game printBoard()
+    leif move (Down)
+    leif move (Down)
+  }
+
   @Test def illegalMovementIntoStaticWall() {
-    val leif = new Monster(game, "MonsterLeif") {
-      gameBoard += (2, 2) -> this
-    }
-    game printBoard ()
+    val leif = new Monster(game, "MonsterLeif") { gameBoard += (2, 2) -> this }
+    game printBoard()
     leif move (Down)
   }
 }

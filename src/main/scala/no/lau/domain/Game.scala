@@ -66,20 +66,18 @@ trait Movable extends GamePiece {
     val oldLocation = game.whereIs(this)
     val newLocation = direction match {
       case Up => (oldLocation._1, oldLocation._2 + 1)
-      case Right => {
-        if(oldLocation._1 >= game.boardSizeX)
-          throw new IllegalMoveException
-        else
-          (oldLocation._1 + 1, oldLocation._2 )
-      }
+      case Right => (oldLocation._1 + 1, oldLocation._2 )
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
+    }
+    if(newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0) {
+      throw IllegalMoveException("Move caused movable to travel across the border")
     }
     //Is this the correct way to do this?
     game.gameBoard.get(newLocation) match {
       case Some(any) => any match {
         case movable:Movable => movable.move(direction)
-        case gamePiece:GamePiece => throw new IllegalMoveException
+        case gamePiece:GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       }
       case None => println(newLocation + " is free; continue!")
     }
@@ -105,10 +103,8 @@ abstract class Player(name: String) extends Movable {
 
 case class Monster(game:Game, id:Any) extends Movable { override def toString = "H" }
 
-case class Block(game:Game, id:Any) extends Movable {
-  override def toString = "B"
-}
+case class Block(game:Game, id:Any) extends Movable { override def toString = "B" }
 
 case class StaticWall() extends GamePiece {override def toString = "W"}
 
-class IllegalMoveException extends Exception
+case class IllegalMoveException(message:String) extends Exception
