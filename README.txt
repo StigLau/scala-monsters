@@ -1,4 +1,4 @@
-This is a recreation of an old PC game, I believe was named Monsters.
+This is a based on an old PC game, Beast, but does not intend to recreate all its functionality  
 
 The game map consists of a grid with randomly placed boxes, monsters and players. 
 The boxes can be pushed, and several can be pushed at once, but they cannot be dragged. Hence, if a box ends up by a wall, it probably cannot be used again.
@@ -17,12 +17,14 @@ http://www.identicalsoftware.com/ogs/2000/beasts.html
 http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
-Todo create movement of movables 
- * If the cascading move places the gameboard in an illegal state, all the moves must be undone
- * and a callback is sent to the client who issued the move
-
+ * todo list:
+ * a callback should be sent to the client who issued the move, if an IllegalMoveException is thrown
+ * implement exploding static walls
+ * Implement squishing
  * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
  * Capture the flag or similar
  * Monster who can push/squish, and monsters who can "eat"
-
  * Property of the game how many cascading moves a monster can create
+ * GameBoards should be vals that are a function of time. Create a new for every new round
+ * Handle crashes - IE multiple monsters wishing to move to the same space in time
+

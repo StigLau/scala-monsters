@@ -81,5 +81,3 @@ class SqueezingTest {
     game boardAsPrintable ()
   }
 }
-//todo implement exploding static walls
-
