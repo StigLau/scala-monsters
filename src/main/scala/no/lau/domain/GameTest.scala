@@ -20,7 +20,7 @@ object GameTest {
     //game.addRandomly(playerKurt)
     //game.addRandomly(playerLeif)
 
-    game.printBoard()
+    game.boardAsPrintable()
 
     //playerLeif.move(Direction.Up)
     //playerLeif.move(Direction.Right)

@@ -5,9 +5,7 @@ package no.lau.domain
  */
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
-  //todo new gameBoard should only contain None's
-  import scala.collection.mutable.HashMap
-  val gameBoard = new HashMap[Tuple2[Int, Int], GamePiece]
+  val gameBoard = new scala.collection.mutable.HashMap[Tuple2[Int, Int], GamePiece]
 
   /**
    * Simple algorithm for scattering out different objects.
@@ -25,22 +23,18 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def addRandomly(gamePiece: GamePiece) = gameBoard += findRandomFreeCell() -> gamePiece
 
-  /**
-   * Used by find where gamepieces are located on the map
-   * todo this search can be written muuuuuch better!!!
-   */
+  //Algorithm can take some time when nr of free cells --> 0
   def whereIs(gamePiece:GamePiece):Tuple2[Int, Int] = {
     val foundItAt:Int = gameBoard.values.indexOf(gamePiece)
     gameBoard.keySet.toArray(foundItAt)
   }
-
-  def printBoard() {
+  //todo return table as string, as opposed to this function printing out each line
+  def boardAsPrintable() {
     for (column <- 0 to boardSizeY) {
       for (row <- 0 to boardSizeX) {
         print(gameBoard.get(row, boardSizeY - column) match {
           case Some(gamePiece) => gamePiece
           case None => "."
-          //case _ => None
         })
       }
       print("\n")
@@ -68,9 +62,8 @@ trait Movable extends GamePiece {
       case Down => (oldLocation._1, oldLocation._2 - 1)
       case Left => (oldLocation._1 - 1, oldLocation._2 )
     }
-    if(newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0) {
+    if(newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0)
       throw IllegalMoveException("Move caused movable to travel across the border")
-    }
     //Is this the correct way to do this?
     game.gameBoard.get(newLocation) match {
       case Some(any) => any match {
