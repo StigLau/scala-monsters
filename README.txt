@@ -18,8 +18,11 @@ http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
 Todo create movement of movables 
- * fix movement of movables to be reflected in gameBoard
- * if the space the gamepiece is moving towards already is occupied by a movable, the occupying movable should do a cascading move
  * If the cascading move places the gameboard in an illegal state, all the moves must be undone
  * and a callback is sent to the client who issued the move
 
+ * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
+ * Capture the flag or similar
+ * Monster who can push/squish, and monsters who can "eat"
+
+ * Property of the game how many cascading moves a monster can create
