@@ -35,7 +35,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     yield {
         val row = for (x <- 0 to boardSizeX)
         yield gameBoard.getOrElse((x, boardSizeY - y), ".")
-        row.foldLeft("\n")(_ + _)
+        row.foldLeft("")(_ + _) + "\n"
       }
     table.foldLeft("")(_ + _)
   }
