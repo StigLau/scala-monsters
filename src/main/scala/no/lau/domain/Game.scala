@@ -29,13 +29,13 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   }
 
   def boardAsPrintable() = {
-    val whole = for (y <- 0 to boardSizeY)
+    val table = for (y <- 0 to boardSizeY)
     yield {
       val row = for (x <- 0 to boardSizeX)
       yield gameBoard.getOrElse((x, boardSizeY - y), ".")
       row.foldLeft("\n")(_+_)
     }
-    whole.foldLeft("")(_+_)
+    table.foldLeft("")(_+_)
   }
 }
 
@@ -47,32 +47,32 @@ trait Movable extends GamePiece {
   /**
    * Used for moving gamepieces around the gameBoard
    * If the route ends up in an illegal move at one stage, the movement will be dropped and an IllegalMovementException will be thrown
+   * todo should probably return new location
    **/
   def move(direction:Direction) {
-    println(this + " moving " + direction);
     val oldLocation = game.whereIs(this)
-    val newLocation = direction match {
-      case Up => (oldLocation._1, oldLocation._2 + 1)
-      case Down => (oldLocation._1, oldLocation._2 - 1)
-      case Right => (oldLocation._1 + 1, oldLocation._2 )
-      case Left => (oldLocation._1 - 1, oldLocation._2 )
-    }
-    if(isOverBorder(newLocation)) throw IllegalMoveException("Move caused movable to travel across the border")
+
+    val newLocation = (oldLocation._1 + direction.dir._1, oldLocation._2 + direction.dir._2)
+
+    if(isOverBorder(newLocation))
+      throw IllegalMoveException("Move caused movable to travel across the border")
 
     //Is this the correct way to do this?
-    game.gameBoard.get(newLocation) match {
-      case Some(any) => any match {
+    game.gameBoard.getOrElse(newLocation, None) match {
         case movable:Movable => movable.move(direction)
         case gamePiece:GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
-      }
-      case None => println(newLocation + " is free; continue!")
+        case None =>
     }
-    println(this + " moved from " + oldLocation + " to " + newLocation)
-    game.gameBoard -= oldLocation 
-    game.gameBoard += newLocation -> this
+    move(oldLocation, newLocation)
   }
 
   private def isOverBorder(newLocation:Tuple2[Int, Int]) = newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0
+
+  private def move(oldLocation:Tuple2[Int, Int], newLocation:Tuple2[Int, Int]) {
+    println(this + " moved from " + oldLocation + " to " + newLocation)
+    game.gameBoard -= oldLocation
+    game.gameBoard += newLocation -> this
+  }
 
   def whereAreYou = game.whereIs(this)
 }
@@ -93,10 +93,7 @@ case object Down extends Direction(0, -1)
 case object Right extends Direction(1, 0)
 case object Left extends Direction(-1, 0)
 
-abstract class Player(name: String) extends Movable {
-  //First letter in name
-  override def toString = name.substring(0, 1)
-}
+abstract class Player(name: String) extends Movable { override def toString = name.substring(0, 1) }  //First letter in name
 
 case class Monster(game:Game, id:Any) extends Movable with Squeezable { override def toString = "H" }
 
