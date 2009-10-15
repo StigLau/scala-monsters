@@ -1,6 +1,7 @@
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test
+import no.lau.domain.movement.{Up, Down, Right, Left}
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {

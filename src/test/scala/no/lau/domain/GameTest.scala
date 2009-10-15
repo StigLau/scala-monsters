@@ -1,7 +1,6 @@
 package no.lau.domain
 
-import Direction.{Up, Down, Left, Right}
-
+import no.lau.domain.movement.{Up, Down, Right, Left}
 
 /**
  * Test used for setting up and testing that the game holds together. 
