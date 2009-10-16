@@ -1,7 +1,7 @@
 package no.lau.domain
 
 import no.lau.domain.movement.{Squeezable, Movable}
-import collection.mutable.HashMap
+import collection.mutable.{ImmutableMapAdaptor, HashMap}
 
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
@@ -9,15 +9,17 @@ import collection.mutable.HashMap
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
 
-  var gameBoards:List[HashMap[Tuple2[Int, Int], GamePiece]] = List()
+  var gameBoards:List[HashMap[Tuple2[Int, Int], GamePiece]] = List(new HashMap[Tuple2[Int, Int], GamePiece])
 
-  def currentGameBoard() = gameBoards.last
+  def currentGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.first
 
-  def newTurn():HashMap[Tuple2[Int, Int], GamePiece] = {
-    gameBoards = gameBoards + new HashMap[Tuple2[Int, Int], GamePiece]
+  def newTurn() = {
+    gameBoards = cloneCurrent :: gameBoards
+    println("Number of boards " + gameBoards.size)
     currentGameBoard
   }
 
+  private def cloneCurrent = currentGameBoard.clone.asInstanceOf[HashMap[Tuple2[Int, Int], GamePiece]]
 
   /**
    * Simple algorithm for scattering out different objects.
@@ -40,7 +42,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     currentGameBoard.keySet.toArray(foundItAt)
   }
 
-  def boardAsPrintable() = {
+  def printableBoard() = {
     val table = for (y <- 0 to boardSizeY)
     yield {
         val row = for (x <- 0 to boardSizeX)

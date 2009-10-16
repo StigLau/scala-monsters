@@ -8,16 +8,15 @@ import no.lau.domain.movement.{Up, Down, Right, Left}
 
 object GameTest {
   def main(args: Array[String]) {
-    val game = Game(40, 25)
+    val game = Game(20, 10)
 
-    var newGameBoard = game.newTurn
-    1 to 300 foreach {arg => game.addRandomly(Block(game, "a"))}
-    println(game boardAsPrintable)
+    1 to 2 foreach {arg => game.addRandomly(Block(game, "a"))}
+    println(game printableBoard)
 
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
     game.newTurn
-    1 to 100 foreach {arg => game.addRandomly(Block(game, "a"))}
-    println(game boardAsPrintable)
+    1 to 1 foreach {arg => game.addRandomly(Block(game, "a"))}
+    println(game printableBoard)
 
 
     //val playerLeif =  Player("Leif")
@@ -33,8 +32,14 @@ object GameTest {
     game.addRandomly(monsterGunnar)
 
     println(monsterGunnar whereAreYou)
+    game.newTurn
     monsterGunnar move (Up)
+    println(game printableBoard)
+
+    game.newTurn    
     monsterGunnar move (Right)
+    println(game printableBoard)
+
     println(monsterGunnar whereAreYou)
     println("Game ended")
   }

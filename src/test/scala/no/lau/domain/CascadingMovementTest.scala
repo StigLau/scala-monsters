@@ -5,7 +5,6 @@ import no.lau.domain.movement.{Up, Down, Right, Left}
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {
-    newTurn
     currentGameBoard += (1, 1) -> Block(this, "a")
     currentGameBoard += (2, 1) -> Block(this, "b")
     currentGameBoard += (2, 0) -> StaticWall()
@@ -15,18 +14,18 @@ class CascadingMovementTest {
   @Test def monsterMovingBlocksTest() {
     val leif = new Monster(game, "MonsterLeif") {game.currentGameBoard += (1, 0) -> this}
     leif move (Up)
-    assertEquals (game boardAsPrintable(),
+    assertEquals (game printableBoard(),
       ".B..\n" +
       ".HB.\n" +
       "..W.\n")
     leif move (Right)
-    assertEquals (game boardAsPrintable(),
+    assertEquals (game printableBoard(),
       ".B..\n" +
       "..HB\n" +
       "..W.\n")
     leif move (Up)
     leif move (Left)
-    assertEquals (game boardAsPrintable(),
+    assertEquals (game printableBoard(),
       "BH..\n" +
       "...B\n" +
       "..W.\n")
@@ -35,7 +34,7 @@ class CascadingMovementTest {
   @Test def cascadingMovementTest() {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
     leif move (Right)
-    assertEquals (game boardAsPrintable(),
+    assertEquals (game printableBoard(),
       "....\n" +
       ".HBB\n" +
       "..W.\n")
@@ -65,7 +64,6 @@ class CascadingMovementTest {
 
 class SqueezingTest {
   val game = new Game(3, 0) {
-    newTurn
     currentGameBoard += (1, 0) -> Block(this, "a")
     currentGameBoard += (3, 0) -> Block(this, "b")
   }
@@ -76,8 +74,8 @@ class SqueezingTest {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
     val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
 
-    assertEquals (game boardAsPrintable(),"HBHB\n")
+    assertEquals (game printableBoard(),"HBHB\n")
     leif move (Right)
-    assertEquals (game boardAsPrintable(),".HBB\n")
+    assertEquals (game printableBoard(),".HBB\n")
   }
 }
