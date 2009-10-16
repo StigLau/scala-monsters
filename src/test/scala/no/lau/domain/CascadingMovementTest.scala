@@ -5,14 +5,15 @@ import no.lau.domain.movement.{Up, Down, Right, Left}
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {
-    gameBoard += (1, 1) -> Block(this, "a")
-    gameBoard += (2, 1) -> Block(this, "b")
-    gameBoard += (2, 0) -> StaticWall()
+    newTurn
+    currentGameBoard += (1, 1) -> Block(this, "a")
+    currentGameBoard += (2, 1) -> Block(this, "b")
+    currentGameBoard += (2, 0) -> StaticWall()
   }
-  val gameBoard = game.gameBoard
+  val currentGameBoard = game.currentGameBoard
 
   @Test def monsterMovingBlocksTest() {
-    val leif = new Monster(game, "MonsterLeif") {game.gameBoard += (1, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") {game.currentGameBoard += (1, 0) -> this}
     leif move (Up)
     assertEquals (game boardAsPrintable(),
       ".B..\n" +
@@ -32,7 +33,7 @@ class CascadingMovementTest {
   }
 
   @Test def cascadingMovementTest() {
-    val leif = new Monster(game, "MonsterLeif") {gameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game boardAsPrintable(),
       "....\n" +
@@ -41,21 +42,21 @@ class CascadingMovementTest {
   }
   //Do something about the IllegalMoveException
   @Test def erronousMovementRightOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") {gameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def erronousMovementDownOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") {gameBoard += (1, 2) -> this}
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (1, 2) -> this}
     leif move (Down)
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def illegalMovementIntoStaticWall() {
-    val leif = new Monster(game, "MonsterLeif") {gameBoard += (2, 2) -> this}
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (2, 2) -> this}
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
@@ -64,15 +65,16 @@ class CascadingMovementTest {
 
 class SqueezingTest {
   val game = new Game(3, 0) {
-    gameBoard += (1, 0) -> Block(this, "a")
-    gameBoard += (3, 0) -> Block(this, "b")
+    newTurn
+    currentGameBoard += (1, 0) -> Block(this, "a")
+    currentGameBoard += (3, 0) -> Block(this, "b")
   }
-  val gameBoard = game.gameBoard
+  val currentGameBoard = game.currentGameBoard
 
   //todo implement squeezing
   @Test def squeezingMonster() {
-    val leif = new Monster(game, "MonsterLeif") {gameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") {gameBoard += (2, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
+    val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
 
     assertEquals (game boardAsPrintable(),"HBHB\n")
     leif move (Right)

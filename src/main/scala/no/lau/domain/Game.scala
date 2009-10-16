@@ -1,13 +1,23 @@
 package no.lau.domain
 
 import no.lau.domain.movement.{Squeezable, Movable}
+import collection.mutable.HashMap
 
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
  */
 case class Game(boardSizeX: Int, boardSizeY: Int) {
   val rnd = new scala.util.Random
-  val gameBoard = new scala.collection.mutable.HashMap[Tuple2[Int, Int], GamePiece]
+
+  var gameBoards:List[HashMap[Tuple2[Int, Int], GamePiece]] = List()
+
+  def currentGameBoard() = gameBoards.last
+
+  def newTurn():HashMap[Tuple2[Int, Int], GamePiece] = {
+    gameBoards = gameBoards + new HashMap[Tuple2[Int, Int], GamePiece]
+    currentGameBoard
+  }
+
 
   /**
    * Simple algorithm for scattering out different objects.
@@ -16,25 +26,25 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
    */
   def findRandomFreeCell(): Tuple2[Int, Int] = {
     val randomCell = (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
-    if (gameBoard.get(randomCell) isEmpty)
+    if (currentGameBoard get(randomCell) isEmpty)
       randomCell
     else
       findRandomFreeCell
   }
 
-  def addRandomly(gamePiece: GamePiece) = gameBoard += findRandomFreeCell() -> gamePiece
+  def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell() -> gamePiece
 
   //Algorithm can take some time when nr of free cells --> 0
   def whereIs(gamePiece: GamePiece): Tuple2[Int, Int] = {
-    val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
-    gameBoard.keySet.toArray(foundItAt)
+    val foundItAt: Int = currentGameBoard.values.indexOf(gamePiece)
+    currentGameBoard.keySet.toArray(foundItAt)
   }
 
   def boardAsPrintable() = {
     val table = for (y <- 0 to boardSizeY)
     yield {
         val row = for (x <- 0 to boardSizeX)
-        yield gameBoard.getOrElse((x, boardSizeY - y), ".")
+        yield currentGameBoard.getOrElse((x, boardSizeY - y), ".")
         row.foldLeft("")(_ + _) + "\n"
       }
     table.foldLeft("")(_ + _)
@@ -72,7 +82,7 @@ trait Movable extends GamePiece {
       throw IllegalMoveException("Move caused movable to travel across the border")
 
     //Is this the correct way to do this?
-    game.gameBoard.getOrElse(newLocation, None) match {
+    game.currentGameBoard.getOrElse(newLocation, None) match {
       case movable: Movable => movable.move(direction)
       case gamePiece: GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       case None =>
@@ -84,8 +94,8 @@ trait Movable extends GamePiece {
 
   private def move(oldLocation: Tuple2[Int, Int], newLocation: Tuple2[Int, Int]) {
     println(this + " moved from " + oldLocation + " to " + newLocation)
-    game.gameBoard -= oldLocation
-    game.gameBoard += newLocation -> this
+    game.currentGameBoard -= oldLocation
+    game.currentGameBoard += newLocation -> this
   }
 
   def whereAreYou = game.whereIs(this)

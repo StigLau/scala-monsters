@@ -17,14 +17,14 @@ http://www.identicalsoftware.com/ogs/2000/beasts.html
 http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
- * todo list:
+ * Prioritized todo list:
  * a callback should be sent to the client who issued the move, if an IllegalMoveException is thrown
+ * implement a clock that ticks a couple of times every second to simulate that the beasts have movement and game progression
  * implement exploding static walls
  * Implement squishing
  * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
  * Capture the flag or similar
  * Monster who can push/squish, and monsters who can "eat"
  * Property of the game how many cascading moves a monster can create
- * GameBoards should be vals that are a function of time. Create a new for every new round
  * Handle crashes - IE multiple monsters wishing to move to the same space in time
 

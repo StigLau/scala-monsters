@@ -10,8 +10,14 @@ object GameTest {
   def main(args: Array[String]) {
     val game = Game(40, 25)
 
+    var newGameBoard = game.newTurn
     1 to 300 foreach {arg => game.addRandomly(Block(game, "a"))}
+    println(game boardAsPrintable)
+
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
+    game.newTurn
+    1 to 100 foreach {arg => game.addRandomly(Block(game, "a"))}
+    println(game boardAsPrintable)
 
 
     //val playerLeif =  Player("Leif")
@@ -19,7 +25,6 @@ object GameTest {
     //game.addRandomly(playerKurt)
     //game.addRandomly(playerLeif)
 
-    game.boardAsPrintable()
 
     //playerLeif.move(Direction.Up)
     //playerLeif.move(Direction.Right)
