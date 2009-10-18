@@ -20,9 +20,13 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
         case stackable: StackableMovement => {
           stackable match {
             case movable: Movable => {
-              val direction = stackable.movementStack.first
-              movable.move(direction)
-              stackable.movementStack = stackable.movementStack.tail
+              stackable.movementStack.firstOption match {
+                case Some(direction) => {
+                  movable.move(direction)
+                  stackable.movementStack = stackable.movementStack.tail
+                }
+                case None =>
+              }
             }
           }
         }

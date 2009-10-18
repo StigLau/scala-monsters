@@ -118,5 +118,8 @@ class ClockedMovementTest {
     assertEquals ("..H.\n", game printableBoard())
     game.newTurn
     assertEquals ("...H\n", game printableBoard())
+
+    game.newTurn
+    assertEquals ("...H\n", game printableBoard())
   }
 }
