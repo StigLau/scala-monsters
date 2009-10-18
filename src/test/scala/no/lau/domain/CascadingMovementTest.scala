@@ -99,3 +99,24 @@ class SqueezingTest {
     catch {case ime: IllegalMoveException =>}
   }
 }
+
+class ClockedMovementTest {
+  @Test def asyncronousMovementStacksUpMovementAndWaitsForTicks() {
+    val game = new Game(3, 0)
+    val currentGameBoard = game.currentGameBoard
+
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
+
+    assertEquals ("H...\n", game printableBoard())
+    leif stackMovement (Right)
+    leif stackMovement (Right)
+    leif stackMovement (Right)
+    assertEquals ("H...\n", game printableBoard())
+    game.newTurn
+    assertEquals (".H..\n", game printableBoard())
+    game.newTurn
+    assertEquals ("..H.\n", game printableBoard())
+    game.newTurn
+    assertEquals ("...H\n", game printableBoard())
+  }
+}

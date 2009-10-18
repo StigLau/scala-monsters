@@ -1,7 +1,7 @@
 package no.lau.domain
 
-import no.lau.domain.movement.{Squeezable, Movable}
 import collection.mutable.HashMap
+import no.lau.domain.movement.{StackableMovement, Squeezable, Movable}
 
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
@@ -15,6 +15,24 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def newTurn() = {
     gameBoards = cloneCurrent :: gameBoards
+    for(gamePiece <- currentGameBoard.values) {
+      gamePiece match {
+        case stackable: StackableMovement => {
+          stackable match {
+            case movable: Movable => {
+              val direction = stackable.movementStack.first
+              movable.move(direction)
+              stackable.movementStack = stackable.movementStack.tail
+            }
+          }
+        }
+        case _ => println("Check that nothing bad happens here!")
+      }
+    }
+    //For all stackable pieces - check if they have a movement scheduled
+    //Check if the movement collides with other movements, in which case, roll back both movements
+    //Remove a movement from the stack of the stackableMovement
+
     currentGameBoard
   }
 
@@ -54,9 +72,9 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
 trait GamePiece
 
-case class Player(name: String, game: Game) extends Movable with Squeezable {override def toString = name.substring(0, 1)} //First letter in name
+//case class Player(name: String, game: Game) extends Movable with Squeezable {override def toString = name.substring(0, 1)} //First letter in name
 
-case class Monster(game: Game, id: Any) extends Movable with Squeezable {
+case class Monster(game: Game, id: Any) extends Movable with Squeezable with StackableMovement {
   override def toString = "H"
 }
 
@@ -68,6 +86,12 @@ case class StaticWall() extends GamePiece {override def toString = "W"}
 case class IllegalMoveException(message: String) extends Throwable
 
 package movement {
+
+trait StackableMovement extends Movable {
+  var movementStack:List[Direction] = List()
+  def stackMovement(dir:Direction) { movementStack = dir :: movementStack }
+}
+
 trait Movable extends GamePiece {
   val game: Game //todo game should preferably be referenced some other way
 

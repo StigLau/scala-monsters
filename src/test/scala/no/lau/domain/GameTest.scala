@@ -14,7 +14,6 @@ object GameTest {
     println(game printableBoard)
 
     //1 to 4 foreach { arg => game.addRandomly(new Monster() {})  }
-    game.newTurn
     1 to 1 foreach {arg => game.addRandomly(Block(game, "a"))}
     println(game printableBoard)
 
@@ -32,8 +31,8 @@ object GameTest {
     game.addRandomly(monsterGunnar)
 
     println(monsterGunnar whereAreYou)
-    game.newTurn
     monsterGunnar move (Up)
+    game.newTurn
     println(game printableBoard)
 
     game.newTurn    
