@@ -13,18 +13,24 @@ class CascadingMovementTest {
 
   @Test def monsterMovingBlocksTest() {
     val leif = new Monster(game, "MonsterLeif") {game.currentGameBoard += (1, 0) -> this}
+    println(game printableBoard())
     leif move (Up)
     assertEquals (game printableBoard(),
       ".B..\n" +
       ".HB.\n" +
       "..W.\n")
+
+    println(game printableBoard())
     leif move (Right)
     assertEquals (game printableBoard(),
       ".B..\n" +
       "..HB\n" +
       "..W.\n")
+    println(game printableBoard())
     leif move (Up)
+    println(game printableBoard())
     leif move (Left)
+    println(game printableBoard())
     assertEquals (game printableBoard(),
       "BH..\n" +
       "...B\n" +
@@ -63,19 +69,33 @@ class CascadingMovementTest {
 
 
 class SqueezingTest {
-  val game = new Game(3, 0) {
-    currentGameBoard += (1, 0) -> Block(this, "a")
-    currentGameBoard += (3, 0) -> Block(this, "b")
-  }
-  val currentGameBoard = game.currentGameBoard
-
-  //todo implement squeezing
   @Test def squeezingMonster() {
+    val game = new Game(3, 0) {
+        currentGameBoard += (1, 0) -> Block(this, "a")
+        currentGameBoard += (3, 0) -> Block(this, "b")
+      }
+      val currentGameBoard = game.currentGameBoard
+
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
     val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
 
-    assertEquals (game printableBoard(),"HBHB\n")
+    assertEquals ("HBHB\n", game printableBoard())
     leif move (Right)
-    assertEquals (game printableBoard(),".HBB\n")
+    assertEquals (".HBB\n", game printableBoard())
+  }
+
+  @Test def squeezingMonsterAgainstThinAirFails() {
+    val game = new Game(4, 0) {
+      currentGameBoard += (1, 0) -> Block(this, "a")
+      currentGameBoard += (4, 0) -> Block(this, "b")
+    }
+    val currentGameBoard = game.currentGameBoard
+    
+    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
+    val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
+
+    assertEquals ("HBH.B\n", game printableBoard())
+    try {leif move (Right)}
+    catch {case ime: IllegalMoveException =>}
   }
 }
