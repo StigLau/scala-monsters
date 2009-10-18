@@ -1,7 +1,7 @@
 package no.lau.domain
 
 import no.lau.domain.movement.{Squeezable, Movable}
-import collection.mutable.{ImmutableMapAdaptor, HashMap}
+import collection.mutable.HashMap
 
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
@@ -15,7 +15,6 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def newTurn() = {
     gameBoards = cloneCurrent :: gameBoards
-    println("Number of boards " + gameBoards.size)
     currentGameBoard
   }
 
@@ -55,7 +54,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
 trait GamePiece
 
-abstract class Player(name: String) extends Movable {override def toString = name.substring(0, 1)} //First letter in name
+case class Player(name: String, game: Game) extends Movable with Squeezable {override def toString = name.substring(0, 1)} //First letter in name
 
 case class Monster(game: Game, id: Any) extends Movable with Squeezable {
   override def toString = "H"
@@ -112,7 +111,6 @@ trait Movable extends GamePiece {
   private def isOverBorder(newLocation: Tuple2[Int, Int]) = newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0
 
   private def move(oldLocation: Tuple2[Int, Int], newLocation: Tuple2[Int, Int]) {
-    println(this + " moved from " + oldLocation + " to " + newLocation)
     game.currentGameBoard -= oldLocation
     game.currentGameBoard += newLocation -> this
   }
@@ -125,7 +123,7 @@ trait Movable extends GamePiece {
  */
 trait Squeezable extends Movable {
   var isKilled = false
-  def kill() {println(this + " was killed"); isKilled = true}
+  def kill() {isKilled = true}
 }
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
