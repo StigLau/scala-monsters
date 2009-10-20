@@ -3,6 +3,9 @@ package no.lau.domain
 import collection.mutable.HashMap
 import no.lau.domain.movement.{StackableMovement, Squeezable, Movable}
 
+import scala.collection.jcl.ArrayList
+
+
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
  */
@@ -44,15 +47,20 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   /**
    * Simple algorithm for scattering out different objects.
-   * Can be increasingly time consuming when nr of free cells -> 0
-   * Got any better ways of doing this? :)
+   * 
+   * Linear execution time to the number of cells in the board. 
    */
-  def findRandomFreeCell: Tuple2[Int, Int] = {
-    val randomCell = (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
-    if (currentGameBoard get(randomCell) isEmpty)
-      randomCell
-    else
-      findRandomFreeCell
+  def findRandomFreeCell(): Tuple2[Int, Int] = {
+    val freeCells = new ArrayList[Tuple2[Int, Int]]()
+    for (i <- 0 to boardSizeX){
+      for (j <- 0 to boardSizeY) {
+        val cell = (i, j)
+        if (currentGameBoard.get(cell) isEmpty){
+          freeCells += cell
+        }
+      }
+    }
+    freeCells(rnd.nextInt(freeCells.length))
   }
 
   def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
