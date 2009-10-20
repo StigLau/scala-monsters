@@ -13,7 +13,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def currentGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.first
 
-  def newTurn() = {
+  def newTurn = {
     gameBoards = cloneCurrent :: gameBoards
     for(gamePiece <- currentGameBoard.values) {
       gamePiece match {
@@ -30,7 +30,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
             }
           }
         }
-        case _ => println("Check that nothing bad happens here!")
+        case _ => 
       }
     }
     //For all stackable pieces - check if they have a movement scheduled
@@ -47,7 +47,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
    * Can be increasingly time consuming when nr of free cells -> 0
    * Got any better ways of doing this? :)
    */
-  def findRandomFreeCell(): Tuple2[Int, Int] = {
+  def findRandomFreeCell: Tuple2[Int, Int] = {
     val randomCell = (rnd.nextInt((0 to boardSizeX) length), rnd.nextInt((0 to boardSizeY) length))
     if (currentGameBoard get(randomCell) isEmpty)
       randomCell
@@ -55,7 +55,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
       findRandomFreeCell
   }
 
-  def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell() -> gamePiece
+  def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
 
   //Algorithm can take some time when nr of free cells --> 0
   def whereIs(gamePiece: GamePiece): Tuple2[Int, Int] = {
@@ -63,7 +63,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     currentGameBoard.keySet.toArray(foundItAt)
   }
 
-  def printableBoard() = {
+  def printableBoard = {
     val table = for (y <- 0 to boardSizeY)
     yield {
         val row = for (x <- 0 to boardSizeX)
@@ -76,8 +76,6 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
 trait GamePiece
 
-//case class Player(name: String, game: Game) extends Movable with Squeezable {override def toString = name.substring(0, 1)} //First letter in name
-
 case class Monster(game: Game, id: Any) extends Movable with Squeezable with StackableMovement {
   override def toString = "H"
 }
@@ -87,11 +85,13 @@ case class Block(game: Game, id: Any) extends Movable {override def toString = "
 
 case class StaticWall() extends GamePiece {override def toString = "W"}
 
-case class IllegalMoveException(message: String) extends Throwable
+case class IllegalMoveException(val message: String) extends Throwable {
+  override def getMessage = message
+}
 
 package movement {
 
-trait StackableMovement extends Movable {
+trait StackableMovement {
   var movementStack:List[Direction] = List()
   def stackMovement(dir:Direction) { movementStack = dir :: movementStack }
 }
@@ -123,7 +123,10 @@ trait Movable extends GamePiece {
     //Is this the correct way to do this?
     game.currentGameBoard.getOrElse(newLocation, None) match {
       case squeezable: Squeezable => {
-        val wasSqueezed = try {squeezable.tryToMove(inThatDirection); false}
+        val wasSqueezed = try {
+          squeezable match {
+            case movable:Movable => movable.tryToMove(inThatDirection); false}
+          }
         catch {
           case ime: IllegalMoveException => squeezable kill; true
         }
@@ -149,7 +152,7 @@ trait Movable extends GamePiece {
 /**
  * Marks that a gamePiece can be squeezed
  */
-trait Squeezable extends Movable {
+trait Squeezable {
   var isKilled = false
   def kill() {isKilled = true}
 }

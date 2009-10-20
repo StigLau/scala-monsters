@@ -13,25 +13,25 @@ class CascadingMovementTest {
 
   @Test def monsterMovingBlocksTest() {
     val leif = new Monster(game, "MonsterLeif") {game.currentGameBoard += (1, 0) -> this}
-    println(game printableBoard())
+    println(game printableBoard)
     leif move (Up)
-    assertEquals (game printableBoard(),
+    assertEquals (game printableBoard,
       ".B..\n" +
       ".HB.\n" +
       "..W.\n")
 
-    println(game printableBoard())
+    println(game printableBoard)
     leif move (Right)
-    assertEquals (game printableBoard(),
+    assertEquals (game printableBoard,
       ".B..\n" +
       "..HB\n" +
       "..W.\n")
-    println(game printableBoard())
+    println(game printableBoard)
     leif move (Up)
-    println(game printableBoard())
+    println(game printableBoard)
     leif move (Left)
-    println(game printableBoard())
-    assertEquals (game printableBoard(),
+    println(game printableBoard)
+    assertEquals (game printableBoard,
       "BH..\n" +
       "...B\n" +
       "..W.\n")
@@ -40,7 +40,7 @@ class CascadingMovementTest {
   @Test def cascadingMovementTest() {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
     leif move (Right)
-    assertEquals (game printableBoard(),
+    assertEquals (game printableBoard,
       "....\n" +
       ".HBB\n" +
       "..W.\n")
@@ -79,9 +79,9 @@ class SqueezingTest {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
     val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
 
-    assertEquals ("HBHB\n", game printableBoard())
+    assertEquals ("HBHB\n", game printableBoard)
     leif move (Right)
-    assertEquals (".HBB\n", game printableBoard())
+    assertEquals (".HBB\n", game printableBoard)
   }
 
   @Test def squeezingMonsterAgainstThinAirFails() {
@@ -94,7 +94,7 @@ class SqueezingTest {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
     val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
 
-    assertEquals ("HBH.B\n", game printableBoard())
+    assertEquals ("HBH.B\n", game printableBoard)
     try {leif move (Right)}
     catch {case ime: IllegalMoveException =>}
   }
@@ -107,19 +107,19 @@ class ClockedMovementTest {
 
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
 
-    assertEquals ("H...\n", game printableBoard())
+    assertEquals ("H...\n", game printableBoard)
     leif stackMovement (Right)
     leif stackMovement (Right)
     leif stackMovement (Right)
-    assertEquals ("H...\n", game printableBoard())
+    assertEquals ("H...\n", game printableBoard)
     game.newTurn
-    assertEquals (".H..\n", game printableBoard())
+    assertEquals (".H..\n", game printableBoard)
     game.newTurn
-    assertEquals ("..H.\n", game printableBoard())
+    assertEquals ("..H.\n", game printableBoard)
     game.newTurn
-    assertEquals ("...H\n", game printableBoard())
+    assertEquals ("...H\n", game printableBoard)
 
     game.newTurn
-    assertEquals ("...H\n", game printableBoard())
+    assertEquals ("...H\n", game printableBoard)
   }
 }

@@ -21,7 +21,6 @@ http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
  * a callback should be sent to the client who issued the move, if an IllegalMoveException is thrown
  * implement a clock that ticks a couple of times every second to simulate that the beasts have movement and game progression
  * implement exploding static walls
- * Implement squishing
  * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
  * Capture the flag or similar
  * Monster who can push/squish, and monsters who can "eat"
