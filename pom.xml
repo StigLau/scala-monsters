@@ -13,7 +13,7 @@
     <description>Squeeze them monsters</description>
 
     <properties>
-        <scala.version>2.7.5</scala.version>
+        <scala.version>2.7.6</scala.version>
     </properties>
 
     <dependencies>
@@ -59,7 +59,7 @@
     </repositories>
 
     <build>
-        <scriptSourceDirectory>src/main/scala</scriptSourceDirectory>
+        <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
