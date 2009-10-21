@@ -19,6 +19,8 @@ object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
    1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+   1 to 2 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+
    val monsterGunnar = new Monster(game, "MonsterGunnar")
    game.addRandomly(monsterGunnar)
    val board = new TextArea(){
@@ -41,7 +43,7 @@ object UI extends SimpleGUIApplication {
      actionMap.put("left", Action("KeyPressed"){monsterGunnar.move(Left); text = game printableBoard}.peer)
      actionMap.put("right", Action("KeyPressed"){monsterGunnar.move(Right); text = game printableBoard}.peer)
      
-     peer.setFont(new Font(Font.MONOSPACED, peer.getFont().getStyle(), 24));
+     peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
      
    }
    
@@ -52,6 +54,6 @@ object UI extends SimpleGUIApplication {
      }
    }
    
-   def refresh() = board text = game printableBoard
+   def refresh = { board text = game printableBoard }
 }  
   

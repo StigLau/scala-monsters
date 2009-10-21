@@ -2,7 +2,6 @@ package no.lau.domain
 
 import java.io.{InputStreamReader}
 import no.lau.domain.movement._
-import actors.Actor
 
 /**
  * Test used for setting up and testing that the game holds together. 
@@ -23,45 +22,51 @@ object GameTest {
     directionHub.start
     new KeyboardHandler(directionHub).start
 
-    println(game printableBoard)
+    new VerySimpleClock(game, 1000).start
   }
 }
 
+import actors.Actor
+import actors.Actor._
 class AsymmetricGamingInterface(game: Game, movable: Movable) extends Actor {
   def act() {
-    while (true) {
+    loop {
       try {
-        receive {
-          case direction: Direction => {
-            movable.move(direction)
-            game.newTurn
-            println(game printableBoard)
-          }
+        react {
+          case direction: Direction => movable.move(direction)
           case _ => println("No direction")
         }
       } catch {
         case ime: IllegalMoveException => println("Illegal Move!! " + ime.getMessage)
       }
     }
-
   }
 }
 
 class KeyboardHandler(gamingInterface: AsymmetricGamingInterface) extends Actor {
   def act() {
-    var continue = true
-    while (continue) {
+    loop {
       val reader = new InputStreamReader(System.in)
       val keyInput = reader.read match {
         case 'w' => Up
         case 'a' => Left
         case 's' => Down
         case 'd' => Right
-        case 'q' => continue = false
+        case 'q' => println("Game ended"); exit()
         case _ => println("Instructions: Use w, a, s, d keys to move. Enter to accept. q to exit")
       }
       if (keyInput.isInstanceOf[Direction]) gamingInterface ! keyInput
     }
-    println("Game ended")
   }
 }
+
+class VerySimpleClock(game:Game, time:Long) extends Actor {
+  def act() {
+    loop {
+      reactWithin(time) {
+        case _ => game.newTurn; println(game printableBoard)
+      }
+    }
+  }
+}
+
