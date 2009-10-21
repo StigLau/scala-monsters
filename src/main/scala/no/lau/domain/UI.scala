@@ -1,11 +1,9 @@
 package no.lau.domain
 
-import java.io.{InputStreamReader}
 import no.lau.domain.movement._
 
-import scala.actors.Actor
-import scala.actors.Actor._
-
+import javax.swing.{JComponent, KeyStroke}
+import java.awt.Font
 
 import scala.swing._
 
@@ -26,43 +24,34 @@ object UI extends SimpleGUIApplication {
    val board = new TextArea(){
      editable = false
      text = game printableBoard
+     
+     val inputMap = peer.getInputMap(JComponent.WHEN_FOCUSED)
+     inputMap.put(KeyStroke.getKeyStroke("UP"), "up")
+     inputMap.put(KeyStroke.getKeyStroke("DOWN"), "down")
+     inputMap.put(KeyStroke.getKeyStroke("LEFT"), "left")
+     inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "right")
+     inputMap.put(KeyStroke.getKeyStroke("typed w"), "up")
+     inputMap.put(KeyStroke.getKeyStroke("typed s"), "down")
+     inputMap.put(KeyStroke.getKeyStroke("typed a"), "left")
+     inputMap.put(KeyStroke.getKeyStroke("typed d"), "right")
+     
+     val actionMap = peer.getActionMap()
+     actionMap.put("up", Action("KeyPressed"){monsterGunnar.move(Up); text = game printableBoard}.peer)
+     actionMap.put("down", Action("KeyPressed"){monsterGunnar.move(Down); text = game printableBoard}.peer)
+     actionMap.put("left", Action("KeyPressed"){monsterGunnar.move(Left); text = game printableBoard}.peer)
+     actionMap.put("right", Action("KeyPressed"){monsterGunnar.move(Right); text = game printableBoard}.peer)
+     
+     peer.setFont(new Font(Font.MONOSPACED, peer.getFont().getStyle(), 24));
+     
    }
    
    def top = new MainFrame {
      contents = new BorderPanel {
        import BorderPanel.Position._
        add(board, Center)
-       KeyboardHandler.start
      }
    }
+   
    def refresh() = board text = game printableBoard
-}
-
-object KeyboardHandler extends Actor {
-  def act(){
-     while (true) {
-       val reader = new InputStreamReader(System.in)
-       val value = reader.read match {
-        case 'w' => Up
-        case 'a' => Left
-        case 's' => Down
-        case 'd' => Right
-        case _ => println("Instructions: Use w, a, s, d keys to move.")
-      }
-      try {
-        value match {
-          case direction: Direction => {
-            UI.monsterGunnar.move(direction)
-            UI.game.newTurn
-            UI.refresh()
-          }
-          case _ => println("No direction")
-        }
-      } catch {
-        case ime: IllegalMoveException => println("Illegal Move!! " + ime.getMessage)
-      }
-    }
-  }
-}     
-  
+}  
   
