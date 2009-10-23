@@ -1,7 +1,7 @@
 case class User(username:String, password:String)
 
 trait UserRepositoryComponent {
-  val userRepository = new UserRepository
+  val userRepository: UserRepository
   class UserRepository {
     def authenticate(user: User): User = {
       println("authenticating user: " + user)
@@ -18,7 +18,7 @@ trait UserRepositoryComponent {
 // component requires, in our case the UserRepositoryComponent
 trait UserServiceComponent {
   this: UserRepositoryComponent =>
-  val userService = new UserService
+  val userService: UserService
   class UserService {
     def authenticate(username: String, password: String): User = userRepository.authenticate(User(username, password))
 
@@ -28,14 +28,17 @@ trait UserServiceComponent {
   }
 }
 
+object ComponentRegistry extends UserServiceComponent with UserRepositoryComponent {
+  val userRepository = new UserRepository
+  val userService = new UserService
+}
 
 object DItest {
   def main(args: Array[String]) {
     val woot = ComponentRegistry
     val userService = ComponentRegistry.userService
-    val user = userService.authenticate("stig", "stog")
+    userService.authenticate("stig", "stog")
   }
 }
 
-object ComponentRegistry extends UserServiceComponent with UserRepositoryComponent
 
