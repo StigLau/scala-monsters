@@ -1,8 +1,8 @@
 import no.lau.domain.movement.{Up, Direction}
 
-trait UserRepositoryComponent {
-  val userRepository: UserRepository
-  class UserRepository {
+trait GameComponent {
+  val game: Game
+  class Game {
     def move(direction:Direction) = {
       println("Moving " + direction)
     }
@@ -10,25 +10,23 @@ trait UserRepositoryComponent {
 }
 
 // using self-type annotation declaring the dependencies this
-// component requires, in our case the UserRepositoryComponent
-trait UserServiceComponent {
-  this: UserRepositoryComponent =>
-  val userService: UserService
-  class UserService {
-    def move(direction:Direction) = userRepository.move(direction)
+// component requires, in our case the GameComponent
+trait MovableComponent {
+  this: GameComponent => val movable: Movable
+  class Movable {
+    def move(direction:Direction) = game.move(direction)
   }
 }
 
-object ComponentRegistry extends UserServiceComponent with UserRepositoryComponent {
-  val userRepository = new UserRepository
-  val userService = new UserService
+object ComponentRegistry extends MovableComponent with GameComponent {
+  val game = new Game
+  val movable = new Movable
 }
 
 object DItest {
   def main(args: Array[String]) {
-    val woot = ComponentRegistry
-    val userService = ComponentRegistry.userService
-    userService.move(Up)
+    val movable = ComponentRegistry.movable
+    movable.move(Up)
   }
 }
 
