@@ -3,7 +3,6 @@ package no.lau.domain.movement
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test
-import no.lau.domain.movement.{Up, Down, Right, Left}
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {
@@ -123,5 +122,20 @@ class ClockedMovementTest {
 
     game.newTurn
     assertEquals ("...H\n", game printableBoard)
+  }
+
+  @Test
+  def stackableMovement {
+    val game = new Game(1, 1)
+    val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
+    game.printableBoard
+    monsterGunnar.stackMovement(Up)
+    monsterGunnar.stackMovement(Right)
+    assertEquals (game printableBoard, "..\nH.\n")
+    game.newTurn
+    assertEquals (game printableBoard, "H.\n..\n")
+    game.newTurn
+    assertEquals (game printableBoard, ".H\n..\n")
+    ""
   }
 }

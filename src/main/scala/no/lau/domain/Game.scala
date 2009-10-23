@@ -23,6 +23,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
         case stackable: StackableMovement => {
           stackable match {
             case movable: Movable => {
+              println(stackable.movementStack)
               stackable.movementStack.firstOption match {
                 case Some(direction) => {
                   movable.move(direction)
@@ -101,7 +102,7 @@ package movement {
 
 trait StackableMovement {
   var movementStack:List[Direction] = List()
-  def stackMovement(dir:Direction) { movementStack = dir :: movementStack }
+  def stackMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
 }
 
 trait Movable extends GamePiece {

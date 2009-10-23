@@ -20,12 +20,18 @@ object UI extends SimpleGUIApplication {
 
    val monsterGunnar = new Monster(game, "MonsterGunnar")
    game.addRandomly(monsterGunnar)
+
+    val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
+    def printGameBoard(): Unit = { gameBoard.text = game printableBoard }
+    val clock = new VerySimpleClock(game, 1000, printGameBoard)
+
+
    val gameBoard = new TextArea(){
      editable = false
      text = game printableBoard
 
      populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
-     populateActionMap(monsterGunnar, peer.getActionMap())
+     populateActionMap(peer.getActionMap(), directionHub)
      peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
    }
 
@@ -35,6 +41,8 @@ object UI extends SimpleGUIApplication {
      }
    }
 
+  directionHub.start
+  clock.start
 
   def populateInputMap(inputMap: InputMap) {
     inputMap.put(KeyStroke.getKeyStroke("UP"), "up")
@@ -47,16 +55,11 @@ object UI extends SimpleGUIApplication {
     inputMap.put(KeyStroke.getKeyStroke("typed d"), "right")
   }
 
-  def populateActionMap(movable:Movable, actionMap: ActionMap) {
-    actionMap.put("up", Action("KeyPressed") {move(movable, Up)}.peer)
-    actionMap.put("down", Action("KeyPressed") {move(movable, Down)}.peer)
-    actionMap.put("left", Action("KeyPressed") {move(movable, Left)}.peer)
-    actionMap.put("right", Action("KeyPressed") {move(movable, Right)}.peer)
-  }
-
-  def move(movable: Movable, direction: Direction) {
-    movable.move(direction)
-    gameBoard.text = game printableBoard
+  def populateActionMap(actionMap: ActionMap, gamingInterface: AsymmetricGamingInterface) {
+    actionMap.put("up", Action("KeyPressed") {gamingInterface ! Up}.peer)
+    actionMap.put("down", Action("KeyPressed") {gamingInterface ! Down}.peer)
+    actionMap.put("left", Action("KeyPressed") {gamingInterface ! Left}.peer)
+    actionMap.put("right", Action("KeyPressed") {gamingInterface ! Right}.peer)
   }
 
   override def main(args: Array[String]) = {

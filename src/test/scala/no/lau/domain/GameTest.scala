@@ -22,18 +22,19 @@ object GameTest {
     directionHub.start
     new KeyboardHandler(directionHub).start
 
-    new VerySimpleClock(game, 1000).start
+    def printGameBoard(): Unit = println(game printableBoard); 
+    new VerySimpleClock(game, 1000, printGameBoard).start
   }
 }
 
 import actors.Actor
 import actors.Actor._
-class AsymmetricGamingInterface(game: Game, movable: Movable) extends Actor {
+class AsymmetricGamingInterface(game: Game, stackableMovable: StackableMovement) extends Actor {
   def act() {
     loop {
       try {
         react {
-          case direction: Direction => movable.move(direction)
+          case direction: Direction => stackableMovable.stackMovement(direction)
           case _ => println("No direction")
         }
       } catch {
@@ -60,11 +61,11 @@ class KeyboardHandler(gamingInterface: AsymmetricGamingInterface) extends Actor 
   }
 }
 
-class VerySimpleClock(game:Game, time:Long) extends Actor {
+class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Actor {
   def act() {
     loop {
       reactWithin(time) {
-        case _ => game.newTurn; println(game printableBoard)
+        case _ => game.newTurn; renderingCallBack()
       }
     }
   }
