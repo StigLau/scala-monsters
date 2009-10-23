@@ -1,32 +1,42 @@
 import no.lau.domain.movement.{Up, Direction}
 
-trait GameComponent {
-  val game: Game
-  class Game {
-    def move(direction:Direction) = {
-      println("Moving " + direction)
-    }
-  }
+
+
+// =======================
+// service interfaces
+trait GameTrait {
+  def move(direction:Direction)
 }
 
-// using self-type annotation declaring the dependencies this
-// component requires, in our case the GameComponent
-trait MovableComponent {
-  this: GameComponent => val movable: Movable
-  class Movable {
-    def move(direction:Direction) = game.move(direction)
-  }
+// =======================
+// service implementations
+class GameImpl extends GameTrait {
+  def move(direction:Direction) = println("move " + direction)
 }
 
-object ComponentRegistry extends MovableComponent with GameComponent {
-  val game = new Game
-  val movable = new Movable
+// =======================
+// service declaring two dependencies that it wants injected
+class Monster2(implicit val game: GameTrait) {
+  def move(direction:Direction) = game.move(direction)
 }
+
+// =======================
+// instantiate the services in a module
+object Services {
+  implicit val gameimpl = new GameImpl
+}
+
+// =======================
+// import the services into the current scope and the wiring
+// is done automatically using the implicits
+import Services._
+
+
 
 object DItest {
   def main(args: Array[String]) {
-    val movable = ComponentRegistry.movable
-    movable.move(Up)
+    val monster = new Monster2
+    monster.move(Up)
   }
 }
 
