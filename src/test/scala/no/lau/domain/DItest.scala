@@ -21,15 +21,16 @@ class Monster2(implicit val game: GameTrait) {
 }
 
 // =======================
+// import the services into the current scope and the wiring
+// is done automatically using the implicits
+import Services._
+
+// =======================
 // instantiate the services in a module
 object Services {
   implicit val gameimpl = new GameImpl
 }
 
-// =======================
-// import the services into the current scope and the wiring
-// is done automatically using the implicits
-import Services._
 
 
 

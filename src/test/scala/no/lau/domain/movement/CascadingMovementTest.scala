@@ -1,3 +1,5 @@
+package no.lau.domain.movement
+
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test

@@ -10,9 +10,6 @@ import scala.swing._
 /**
  * Created by IntelliJ IDEA.
  * User: beiske
- * Date: Oct 19, 2009
- * Time: 3:27:26 PM
- * To change this template use File | Settings | File Templates.
  */
 
 object UI extends SimpleGUIApplication {
@@ -55,5 +52,5 @@ object UI extends SimpleGUIApplication {
    }
    
    def refresh = { board text = game printableBoard }
-}  
-  
+}
+
