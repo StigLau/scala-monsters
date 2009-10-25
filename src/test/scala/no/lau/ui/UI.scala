@@ -8,15 +8,15 @@ import scala.swing._
 import javax.swing.{InputMap, SwingUtilities, JComponent, KeyStroke, ActionMap}
 
 /**
- * Created by IntelliJ IDEA.
- * User: beiske
+ * @author: beiske
+ * @author: StigLau
  */
 
 object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
    1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
-   1 to 2 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+   1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
 
    val monsterGunnar = new Monster(game, "MonsterGunnar")
    game.addRandomly(monsterGunnar)

@@ -138,4 +138,17 @@ class ClockedMovementTest {
     assertEquals (game printableBoard, ".H\n..\n")
     ""
   }
+
+  @Test
+  def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression {
+    val game = new Game(0, 0)
+    val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
+    game.printableBoard
+    monsterGunnar.stackMovement(Up)
+    monsterGunnar.stackMovement(Right)
+    assertEquals(2, monsterGunnar.movementStack.size)
+    game.newTurn
+    assertEquals(0, monsterGunnar.movementStack.size)
+    ""
+  }
 }

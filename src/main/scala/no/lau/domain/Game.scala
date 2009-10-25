@@ -15,19 +15,28 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   var gameBoards:List[HashMap[Tuple2[Int, Int], GamePiece]] = List(new HashMap[Tuple2[Int, Int], GamePiece])
 
   def currentGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.first
+  def previousGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.tail.first
 
   def newTurn = {
     gameBoards = cloneCurrent :: gameBoards
-    for(gamePiece <- currentGameBoard.values) {
+    for(gamePiece <- previousGameBoard.values) {
       gamePiece match {
         case stackable: StackableMovement => {
           stackable match {
             case movable: Movable => {
-              println(stackable.movementStack)
+              if(stackable.movementStack.size > 0) println(stackable.movementStack)
               stackable.movementStack.firstOption match {
                 case Some(direction) => {
-                  movable.move(direction)
-                  stackable.movementStack = stackable.movementStack.tail
+                  try {
+                    movable.move(direction)
+                    stackable.movementStack = stackable.movementStack.tail
+                  } catch {
+                    case ime: IllegalMoveException => {
+                      println("Illegal Move for " + movable + " :"+ ime.getMessage)
+                      stackable.movementStack = List()
+                      stackable.progressionHalted
+                    }
+                  }
                 }
                 case None =>
               }
@@ -67,9 +76,9 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
 
   //Algorithm can take some time when nr of free cells --> 0
-  def whereIs(gamePiece: GamePiece): Tuple2[Int, Int] = {
-    val foundItAt: Int = currentGameBoard.values.indexOf(gamePiece)
-    currentGameBoard.keySet.toArray(foundItAt)
+  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Tuple2[Int, Int], GamePiece]): Tuple2[Int, Int] = {
+    val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
+    gameBoard.keySet.toArray(foundItAt)
   }
 
   def printableBoard = {
@@ -103,6 +112,7 @@ package movement {
 trait StackableMovement {
   var movementStack:List[Direction] = List()
   def stackMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
+  def progressionHalted { println("Further progression halted") } //todo implement what clients should do when progression halts
 }
 
 trait Movable extends GamePiece {
@@ -115,14 +125,14 @@ trait Movable extends GamePiece {
    **/
 
   def move(inThatDirection: Direction) {
-    val oldLocation = game.whereIs(this)
+    val oldLocation = game.whereIs(this, game.previousGameBoard)
     val newLocation = tryToMove(inThatDirection)
     move(oldLocation, newLocation)
   }
 
 
   def tryToMove(inThatDirection: Direction):Tuple2[Int, Int] = {
-    val oldLocation = game.whereIs(this)
+    val oldLocation = game.whereIs(this, game.previousGameBoard)
 
     val newLocation = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
 
@@ -130,7 +140,7 @@ trait Movable extends GamePiece {
       throw IllegalMoveException("Move caused movable to travel across the border")
 
     //Is this the correct way to do this?
-    game.currentGameBoard.getOrElse(newLocation, None) match {
+    game.previousGameBoard.getOrElse(newLocation, None) match {
       case squeezable: Squeezable => {
         val wasSqueezed = try {
           squeezable match {
@@ -155,7 +165,7 @@ trait Movable extends GamePiece {
     game.currentGameBoard += newLocation -> this
   }
 
-  def whereAreYou = game.whereIs(this)
+  def whereAreYou = game.whereIs(this, game.previousGameBoard)
 }
 
 /**

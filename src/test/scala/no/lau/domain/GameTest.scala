@@ -32,13 +32,9 @@ import actors.Actor._
 class AsymmetricGamingInterface(game: Game, stackableMovable: StackableMovement) extends Actor {
   def act() {
     loop {
-      try {
-        react {
-          case direction: Direction => stackableMovable.stackMovement(direction)
-          case _ => println("No direction")
-        }
-      } catch {
-        case ime: IllegalMoveException => println("Illegal Move!! " + ime.getMessage)
+      react {
+        case direction: Direction => stackableMovable.stackMovement(direction)
+        case _ => println("No direction")
       }
     }
   }
