@@ -23,10 +23,10 @@
             <version>${scala.version}</version>
         </dependency>
         <dependency>
-    		<groupId>org.scala-lang</groupId>
-    		<artifactId>scala-swing</artifactId>
-    		<version>${scala.version}</version>
-		</dependency> 
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-swing</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
@@ -65,6 +65,17 @@
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
             </plugin>
         </plugins>
     </build>

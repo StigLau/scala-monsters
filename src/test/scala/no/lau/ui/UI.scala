@@ -50,10 +50,6 @@ object UI extends SimpleGUIApplication {
     inputMap.put(KeyStroke.getKeyStroke("DOWN"), "down")
     inputMap.put(KeyStroke.getKeyStroke("LEFT"), "left")
     inputMap.put(KeyStroke.getKeyStroke("RIGHT"), "right")
-    inputMap.put(KeyStroke.getKeyStroke("typed w"), "up")
-    inputMap.put(KeyStroke.getKeyStroke("typed s"), "down")
-    inputMap.put(KeyStroke.getKeyStroke("typed a"), "left")
-    inputMap.put(KeyStroke.getKeyStroke("typed d"), "right")
   }
 
   def populateActionMap(actionMap: ActionMap, gamingInterface: AsymmetricGamingInterface) {
