@@ -10,7 +10,7 @@ import actors.Actor.loop
  * Test used for setting up and testing that the game holds together. 
  */
 
-object GameTest {
+object AsciDemo {
   def main(args: Array[String]) {
     val game = Game(20, 10)
     val rnd = new scala.util.Random

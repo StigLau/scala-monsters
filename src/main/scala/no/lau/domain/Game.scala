@@ -15,7 +15,12 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   var gameBoards:List[HashMap[Tuple2[Int, Int], GamePiece]] = List(new HashMap[Tuple2[Int, Int], GamePiece])
 
   def currentGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.first
-  def previousGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = gameBoards.tail.first
+  def previousGameBoard():HashMap[Tuple2[Int, Int], GamePiece] = {
+    if(gameBoards.tail.size > 0)
+      gameBoards.tail.first
+    else
+      gameBoards.first
+  }
 
   def newTurn = {
     gameBoards = cloneCurrent :: gameBoards

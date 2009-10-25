@@ -46,7 +46,7 @@ class CascadingMovementTest {
       ".HBB\n" +
       "..W.\n")
   }
-  //Do something about the IllegalMoveException
+
   @Test def erronousMovementRightOverTheBoarder() {
     val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
     leif move (Right)
@@ -125,7 +125,7 @@ class ClockedMovementTest {
   }
 
   @Test
-  def stackableMovement {
+  def stackableMovement() {
     val game = new Game(1, 1)
     val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
@@ -140,7 +140,7 @@ class ClockedMovementTest {
   }
 
   @Test
-  def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression {
+  def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression() {
     val game = new Game(0, 0)
     val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
