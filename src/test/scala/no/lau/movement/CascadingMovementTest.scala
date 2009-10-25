@@ -13,7 +13,7 @@ class CascadingMovementTest {
   val currentGameBoard = game.currentGameBoard
 
   @Test def monsterMovingBlocksTest() {
-    val leif = new Monster(game, "MonsterLeif") {game.currentGameBoard += (1, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {game.currentGameBoard += (1, 0) -> this}
     println(game printableBoard)
     leif move (Up)
     assertEquals (game printableBoard,
@@ -39,7 +39,7 @@ class CascadingMovementTest {
   }
 
   @Test def cascadingMovementTest() {
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
       "....\n" +
@@ -48,21 +48,21 @@ class CascadingMovementTest {
   }
 
   @Test def erronousMovementRightOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def erronousMovementDownOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (1, 2) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (1, 2) -> this}
     leif move (Down)
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def illegalMovementIntoStaticWall() {
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (2, 2) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (2, 2) -> this}
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
@@ -77,8 +77,8 @@ class SqueezingTest {
       }
       val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
+    val offer = new Monster(game, "Offer") with Movable {currentGameBoard += (2, 0) -> this}
 
     assertEquals ("HBHB\n", game printableBoard)
     leif move (Right)
@@ -92,8 +92,8 @@ class SqueezingTest {
     }
     val currentGameBoard = game.currentGameBoard
     
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") {currentGameBoard += (2, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
+    val offer = new Monster(game, "Offer") with Movable {currentGameBoard += (2, 0) -> this}
 
     assertEquals ("HBH.B\n", game printableBoard)
     try {leif move (Right)}
@@ -106,7 +106,7 @@ class ClockedMovementTest {
     val game = new Game(3, 0)
     val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game, "MonsterLeif") {currentGameBoard += (0, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with StackableMovement {currentGameBoard += (0, 0) -> this}
 
     assertEquals ("H...\n", game printableBoard)
     leif stackMovement (Right)
@@ -127,7 +127,7 @@ class ClockedMovementTest {
   @Test
   def stackableMovement() {
     val game = new Game(1, 1)
-    val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
     monsterGunnar.stackMovement(Up)
     monsterGunnar.stackMovement(Right)
@@ -142,7 +142,7 @@ class ClockedMovementTest {
   @Test
   def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression() {
     val game = new Game(0, 0)
-    val monsterGunnar = new Monster(game, "MonsterLeif") {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
     monsterGunnar.stackMovement(Up)
     monsterGunnar.stackMovement(Right)

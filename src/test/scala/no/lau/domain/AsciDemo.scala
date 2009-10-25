@@ -16,10 +16,10 @@ object AsciDemo {
     val rnd = new scala.util.Random
 
     1 to 20 foreach {arg => game.addRandomly(Block(game, "block" + rnd.nextInt()))}
-    1 to 2 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+    1 to 2 foreach {arg => game.addRandomly(new Monster(game, "monster" + rnd.nextInt()) with StackableMovement)}
 
 
-    val monsterGunnar = new Monster(game, "MonsterGunnar")
+    val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
     game.addRandomly(monsterGunnar)
     val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
     directionHub.start

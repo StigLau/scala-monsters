@@ -99,7 +99,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
 trait GamePiece
 
-case class Monster(game: Game, id: Any) extends Movable with Squeezable with StackableMovement {
+case class Monster(game: Game, id: Any) extends GamePiece{
   override def toString = "H"
 }
 
@@ -114,7 +114,7 @@ case class IllegalMoveException(val message: String) extends Throwable {
 
 package movement {
 
-trait StackableMovement {
+trait StackableMovement extends Movable {
   var movementStack:List[Direction] = List()
   def stackMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
   def progressionHalted { println("Further progression halted") } //todo implement what clients should do when progression halts

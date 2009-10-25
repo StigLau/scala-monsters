@@ -7,6 +7,7 @@ import java.awt.Font
 import scala.swing._
 import javax.swing.{InputMap, SwingUtilities, JComponent, KeyStroke, ActionMap}
 import no.lau.movement.{VerySimpleClock, AsymmetricGamingInterface}
+import no.lau.monsters.RammingMonster
 
 /**
  * @author: beiske
@@ -16,10 +17,12 @@ import no.lau.movement.{VerySimpleClock, AsymmetricGamingInterface}
 object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
-   1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
-   1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+   //1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+   //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster")
+  game.addRandomly(rammstein)
 
-   val monsterGunnar = new Monster(game, "MonsterGunnar")
+   val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
    game.addRandomly(monsterGunnar)
 
     val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
