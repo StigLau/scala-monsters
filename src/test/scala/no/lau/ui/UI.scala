@@ -6,6 +6,7 @@ import java.awt.Font
 
 import scala.swing._
 import javax.swing.{InputMap, SwingUtilities, JComponent, KeyStroke, ActionMap}
+import no.lau.movement.{VerySimpleClock, AsymmetricGamingInterface}
 
 /**
  * @author: beiske

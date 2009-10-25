@@ -2,6 +2,9 @@ package no.lau.domain
 
 import java.io.{InputStreamReader}
 import no.lau.domain.movement._
+import no.lau.movement.{AsymmetricGamingInterface, VerySimpleClock}
+import actors.Actor
+import actors.Actor.loop
 
 /**
  * Test used for setting up and testing that the game holds together. 
@@ -27,18 +30,6 @@ object GameTest {
   }
 }
 
-import actors.Actor
-import actors.Actor._
-class AsymmetricGamingInterface(game: Game, stackableMovable: StackableMovement) extends Actor {
-  def act() {
-    loop {
-      react {
-        case direction: Direction => stackableMovable.stackMovement(direction)
-        case _ => println("No direction")
-      }
-    }
-  }
-}
 
 class KeyboardHandler(gamingInterface: AsymmetricGamingInterface) extends Actor {
   def act() {
@@ -57,13 +48,4 @@ class KeyboardHandler(gamingInterface: AsymmetricGamingInterface) extends Actor 
   }
 }
 
-class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Actor {
-  def act() {
-    loop {
-      reactWithin(time) {
-        case _ => game.newTurn; renderingCallBack()
-      }
-    }
-  }
-}
 

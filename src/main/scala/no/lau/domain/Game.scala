@@ -32,7 +32,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
                     stackable.movementStack = stackable.movementStack.tail
                   } catch {
                     case ime: IllegalMoveException => {
-                      println("Illegal Move for " + movable + " :"+ ime.getMessage)
+                      println("Illegal Move for " + movable + ": "+ ime.getMessage)
                       stackable.movementStack = List()
                       stackable.progressionHalted
                     }
