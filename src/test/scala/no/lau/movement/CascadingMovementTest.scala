@@ -3,6 +3,7 @@ package no.lau.domain.movement
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test
+import no.lau.monsters.RammingMonster
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {
@@ -151,4 +152,28 @@ class ClockedMovementTest {
     assertEquals(0, monsterGunnar.movementStack.size)
     ""
   }
+
+  @Test
+  def RamTest {
+    val game = new Game(3, 3) {
+        //currentGameBoard += (3, 0) -> Block(this, "b")
+      }
+      val currentGameBoard = game.currentGameBoard
+
+    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
+    val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") {currentGameBoard += (3, 3) -> this}
+
+    for ( step <- 0 to 10) {
+      println(game.printableBoard)
+      val direction = rammstein.findPathTo(rammstein.findEnemies.head)
+      println("Going " + direction)
+      rammstein.move(direction)
+    }
+
+    /*
+    rammstein.tick
+    rammstein.findEnemies
+    */
+  }
+
 }
