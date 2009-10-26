@@ -19,8 +19,6 @@ object UI extends SimpleGUIApplication {
    val rnd = new scala.util.Random
    //1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
-  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster")
-  game.addRandomly(rammstein)
 
    val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
    game.addRandomly(monsterGunnar)
@@ -44,6 +42,10 @@ object UI extends SimpleGUIApplication {
        add(gameBoard, BorderPanel.Position.Center)
      }
    }
+
+  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster")
+  game.addRandomly(rammstein)
+  clock.addTickListener(rammstein)
 
   directionHub.start
   clock.start
