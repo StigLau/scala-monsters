@@ -63,7 +63,8 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   /**
    * Simple algorithm for scattering out different objects.
    * 
-   * Linear execution time to the number of cells in the board. 
+   * Linear execution time to the number of cells in the board.
+   * todo IMPROVE CODE!!!!!! 
    */
   def findRandomFreeCell(): Tuple2[Int, Int] = {
     val freeCells = new ArrayList[Tuple2[Int, Int]]()
@@ -162,7 +163,10 @@ trait Movable extends GamePiece {
         if(!wasSqueezed) throw IllegalMoveException("Nothing to be squeezed against")
         */
       }
-      case movable: Movable => movable.move(inThatDirection)
+      case movable: Movable => this match {
+        case pusher:Pusher => movable.move(inThatDirection)
+        case _ => throw IllegalMoveException("Not allowed to push") 
+      }
       case gamePiece: GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       case None =>
     }
@@ -190,6 +194,9 @@ trait Mortal {
 }
 // Marks that a Monster kan kill by eating
 trait Meelee
+
+//Able to push stuff todo should have a set value of number of movables it can push
+trait Pusher
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {

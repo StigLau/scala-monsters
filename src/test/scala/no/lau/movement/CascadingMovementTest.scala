@@ -14,7 +14,7 @@ class CascadingMovementTest {
   val currentGameBoard = game.currentGameBoard
 
   @Test def monsterMovingBlocksTest() {
-    val leif = new Monster(game, "MonsterLeif") with Movable {game.currentGameBoard += (1, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {game.currentGameBoard += (1, 0) -> this}
     println(game printableBoard)
     leif move (Up)
     assertEquals (game printableBoard,
@@ -40,7 +40,7 @@ class CascadingMovementTest {
   }
 
   @Test def cascadingMovementTest() {
-    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
       "....\n" +
@@ -49,14 +49,14 @@ class CascadingMovementTest {
   }
 
   @Test def erronousMovementRightOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def erronousMovementDownOverTheBoarder() {
-    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (1, 2) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (1, 2) -> this}
     leif move (Down)
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
@@ -165,7 +165,7 @@ class ClockedMovementTest {
 
     for ( step <- 0 to 10) {
       println(game.printableBoard)
-      val direction = rammstein.findPathTo(rammstein.findEnemies.head)
+      val direction = rammstein.findPathTo(rammstein.enemies.head)
       println("Going " + direction)
       rammstein.move(direction)
     }

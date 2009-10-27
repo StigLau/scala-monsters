@@ -9,17 +9,16 @@ import no.lau.domain.movement._
  */
 class RammingMonster(game: Game, id: Any) extends Monster(game, id) with StackableMovement with TickListener with Meelee with Mortal {
   override def tick {
-    val enemies = findEnemies
     enemies.firstOption match {
       case Some(enemy) => {
-        val direction = findPathTo(findEnemies.head)
+        val direction = findPathTo(enemies.head)
         stackMovement(direction)
       }
-      case None => 
+      case None =>
     }
   }
 
-  def findEnemies:List[GamePiece] = game.currentGameBoard.values.filter((x: GamePiece) => x.isInstanceOf[Monster] && x != this).toList
+  def enemies:List[GamePiece] = game.currentGameBoard.values.filter((x: GamePiece) => x.isInstanceOf[Monster] && x != this).toList
 
   def findPathTo(enemy: GamePiece): Direction = {
     val iAmHere = game.whereIs(this, game.currentGameBoard)
