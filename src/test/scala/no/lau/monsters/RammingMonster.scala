@@ -10,12 +10,13 @@ import no.lau.domain.movement._
 class RammingMonster(game: Game, id: Any) extends Monster(game, id) with StackableMovement with TickListener {
   override def tick {
     val enemies = findEnemies
-    enemies.headOption match {
+    enemies.firstOption match {
       case Some(enemy) => {
         val direction = findPathTo(findEnemies.head)
         println("Going " + direction)
         stackMovement(direction)
       }
+      case None => 
     }
   }
 
@@ -25,18 +26,19 @@ class RammingMonster(game: Game, id: Any) extends Monster(game, id) with Stackab
     val iAmHere = game.whereIs(this, game.currentGameBoard)
     val enemyIsThere = game.whereIs(enemy, game.currentGameBoard)
 
-    val xDistance = iAmHere._1 - enemyIsThere._1
-    val yDistance = iAmHere._2 - enemyIsThere._2
+    val xDistance = Math.abs(iAmHere._1 - enemyIsThere._1)
+    val yDistance = Math.abs(iAmHere._2 - enemyIsThere._2)
     if (xDistance > yDistance) {
       if (iAmHere._1 > enemyIsThere._1)
         return Left
       else
         return Right
-    } else
-    if (iAmHere._2 > enemyIsThere._2)
-      return Down
-    else
-      return Up
+    } else {
+      if (iAmHere._2 > enemyIsThere._2)
+        return Down
+      else
+        return Up
+    }
   }
 }
 

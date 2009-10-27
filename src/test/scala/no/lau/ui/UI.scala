@@ -17,7 +17,7 @@ import no.lau.monsters.RammingMonster
 object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
-   //1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+   1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
 
    val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
@@ -25,7 +25,7 @@ object UI extends SimpleGUIApplication {
 
     val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
     def printGameBoard(): Unit = { gameBoard.text = game printableBoard }
-    val clock = new VerySimpleClock(game, 1000, printGameBoard)
+    val clock = new VerySimpleClock(game, 200, printGameBoard)
 
 
    val gameBoard = new TextArea(){
