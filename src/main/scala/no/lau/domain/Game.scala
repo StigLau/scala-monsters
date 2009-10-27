@@ -1,7 +1,7 @@
 package no.lau.domain
 
 import collection.mutable.HashMap
-import no.lau.domain.movement.{StackableMovement, Squeezable, Movable}
+import no.lau.domain.movement.{StackableMovement, Movable}
 
 import scala.collection.jcl.ArrayList
 
@@ -80,7 +80,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
 
-  //Algorithm can take some time when nr of free cells --> 0
+  //todo if two monsters wish to move to the same tile, a ArrayIndexOutOfBoundsException: -1 can be thrown! Needs to be fixed 
   def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Tuple2[Int, Int], GamePiece]): Tuple2[Int, Int] = {
     val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
     gameBoard.keySet.toArray(foundItAt)
@@ -145,16 +145,22 @@ trait Movable extends GamePiece {
       throw IllegalMoveException("Move caused movable to travel across the border")
 
     //Is this the correct way to do this?
-    game.previousGameBoard.getOrElse(newLocation, None) match {
-      case squeezable: Squeezable => {
+    whosInMyWay(newLocation) match {
+      case mortal: Mortal => {
+        this match {
+          case meelee:Meelee => mortal.kill
+        }
+        //todo Not sure what should be done for squeezing
+        /*
         val wasSqueezed = try {
-          squeezable match {
+          mortal match {
             case movable:Movable => movable.tryToMove(inThatDirection); false}
           }
         catch {
-          case ime: IllegalMoveException => squeezable kill; true
+          case ime: IllegalMoveException => mortal kill; true
         }
         if(!wasSqueezed) throw IllegalMoveException("Nothing to be squeezed against")
+        */
       }
       case movable: Movable => movable.move(inThatDirection)
       case gamePiece: GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
@@ -162,6 +168,8 @@ trait Movable extends GamePiece {
     }
     newLocation
   }
+
+  private def whosInMyWay(newLocation:Tuple2[Int, Int]) = game.previousGameBoard.getOrElse(newLocation, None)
 
   private def isOverBorder(newLocation: Tuple2[Int, Int]) = newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0
 
@@ -174,12 +182,14 @@ trait Movable extends GamePiece {
 }
 
 /**
- * Marks that a gamePiece can be squeezed
+ * Marks that a gamePiece can be killed
  */
-trait Squeezable {
+trait Mortal {
   var isKilled = false
-  def kill() {isKilled = true}
+  def kill() {isKilled = true; println("I was killed!")}
 }
+// Marks that a Monster kan kill by eating
+trait Meelee
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {

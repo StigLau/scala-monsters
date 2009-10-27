@@ -20,7 +20,7 @@ object UI extends SimpleGUIApplication {
    1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
 
-   val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
+   val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal
    game.addRandomly(monsterGunnar)
 
     val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
@@ -46,6 +46,10 @@ object UI extends SimpleGUIApplication {
   val rammstein = new RammingMonster(game, "Rammstein, the ramming monster")
   game.addRandomly(rammstein)
   clock.addTickListener(rammstein)
+
+  val rammy = new RammingMonster(game, "Rammy, the ramming monster")
+  game.addRandomly(rammy)
+  //clock.addTickListener(rammy)
 
   directionHub.start
   clock.start
