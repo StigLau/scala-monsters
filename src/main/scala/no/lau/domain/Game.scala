@@ -3,9 +3,6 @@ package no.lau.domain
 import collection.mutable.HashMap
 import no.lau.domain.movement.{StackableMovement, Movable}
 
-import scala.collection.jcl.ArrayList
-
-
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
  */
@@ -29,7 +26,9 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
         case stackable: StackableMovement => {
           stackable match {
             case movable: Movable => {
+
               if(stackable.movementStack.size > 0) println(stackable.movementStack)
+
               stackable.movementStack.firstOption match {
                 case Some(direction) => {
                   try {
@@ -48,7 +47,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
             }
           }
         }
-        case _ => 
+        case _ =>
       }
     }
     //For all stackable pieces - check if they have a movement scheduled
@@ -61,10 +60,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   private def cloneCurrent = currentGameBoard.clone.asInstanceOf[HashMap[Tuple2[Int, Int], GamePiece]]
 
   /**
-   * Simple algorithm for scattering out different objects.
-   * 
-   * Linear execution time to the number of cells in the board.
-   * todo IMPROVE CODE!!!!!! 
+   * Simple algorithm for selecting free tiles on a board
    */
   def findRandomFreeCell(): Tuple2[Int, Int] = {
     val freeCells = for {
@@ -87,8 +83,7 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   def printableBoard = {
     val table = for (y <- 0 to boardSizeY)
     yield {
-        val row = for (x <- 0 to boardSizeX)
-        yield currentGameBoard.getOrElse((x, boardSizeY - y), ".")
+        val row = for (x <- 0 to boardSizeX) yield currentGameBoard.getOrElse((x, boardSizeY - y), ".")
         row.foldLeft("")(_ + _) + "\n"
       }
     table.foldLeft("")(_ + _)
