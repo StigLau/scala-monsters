@@ -67,15 +67,12 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
    * todo IMPROVE CODE!!!!!! 
    */
   def findRandomFreeCell(): Tuple2[Int, Int] = {
-    val freeCells = new ArrayList[Tuple2[Int, Int]]()
-    for (i <- 0 to boardSizeX){
-      for (j <- 0 to boardSizeY) {
-        val cell = (i, j)
-        if (currentGameBoard.get(cell) isEmpty){
-          freeCells += cell
-        }
-      }
-    }
+    val freeCells = for {
+      i <- 0 to boardSizeX
+      j <- 0 to boardSizeY
+      if currentGameBoard.get((i, j)) isEmpty}
+    yield (i, j)
+
     freeCells(rnd.nextInt(freeCells.length))
   }
 
