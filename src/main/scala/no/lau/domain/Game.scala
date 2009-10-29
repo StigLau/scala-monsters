@@ -132,17 +132,18 @@ trait Movable extends GamePiece {
   def tryToMove(inThatDirection: Direction):Tuple2[Int, Int] = {
     val oldLocation = game.whereIs(this, game.previousGameBoard)
 
-    val newLocation = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
+    val newLocation = goingTowards(oldLocation, inThatDirection)
 
     if (isOverBorder(newLocation))
       throw IllegalMoveException("Move caused movable to travel across the border")
 
     //Is this the correct way to do this?
-    whosInMyWay(newLocation) match {
-      case mortal: Mortal => {
+    whoIsAtNewLocation(oldLocation, inThatDirection) match {
+      case Some(mortal: Mortal) => {
         this match {
           case meelee:Meelee => mortal.kill
-          case block:Block => println("What is this block showing up here?")
+          case block:Block => println("What is this block showing up here? Is the killee removed from the board?")
+          case _ => throw IllegalMoveException("No Meelee trait!")  
         }
         //todo Not sure what should be done for squeezing
         /*
@@ -156,20 +157,16 @@ trait Movable extends GamePiece {
         if(!wasSqueezed) throw IllegalMoveException("Nothing to be squeezed against")
         */
       } //todo WAAAY ugly hack for squeezing monsters
-      case movable: Movable => {
+      case Some(movable: Movable) => {
         //Code for squishing
-        //Pusher B
-        val secondPlace = (newLocation._1 + inThatDirection.dir._1, newLocation._2 + inThatDirection.dir._2)
+        //Sequence for a squish: Pusher -> Movable -> Mortal -> GamePiece or  HBHB -> .HBB
+        //val secondPlace = (newLocation._1 + inThatDirection.dir._1, newLocation._2 + inThatDirection.dir._2)
         //Pusher B Mortal
-        if (whosInMyWay(secondPlace).isInstanceOf[Mortal]) {
-          whosInMyWay(secondPlace) match {
-            case mortal: Mortal => {
-              val thirdPlace = (secondPlace._1 + inThatDirection.dir._1, secondPlace._2 + inThatDirection.dir._2)
-              whosInMyWay(thirdPlace) match {
-                case gp:GamePiece => mortal.kill; movable.move(inThatDirection)
-                case None => throw new IllegalMoveException("This code has to be checked!")
-              }
-            }
+        val second = whoIsAtNewLocation(movable.whereAreYou, inThatDirection)
+        if (second.isInstanceOf[Mortal]) {
+          whoIsAtNewLocation(movable.whereAreYou, inThatDirection) match {
+            case Some(gp: GamePiece) => second.asInstanceOf[Mortal].kill; movable.move(inThatDirection)
+            case None => throw new IllegalMoveException("This code has to be checked!")
           }
         }
         else {
@@ -179,13 +176,16 @@ trait Movable extends GamePiece {
           }
         }
       }
-      case gamePiece: GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
+      case Some(gamePiece: GamePiece) => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       case None =>
     }
     newLocation
   }
 
-  private def whosInMyWay(newLocation:Tuple2[Int, Int]) = game.previousGameBoard.getOrElse(newLocation, None)
+  private def goingTowards(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Tuple2[Int, Int] = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
+  private def whoIsAtNewLocation(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Option[GamePiece] = whosInMyWay(goingTowards(oldLocation, inThatDirection))
+
+  private def whosInMyWay(newLocation:Tuple2[Int, Int]):Option[GamePiece] = game.previousGameBoard.get(newLocation)
 
   private def isOverBorder(newLocation: Tuple2[Int, Int]) = newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0
 
@@ -208,9 +208,7 @@ trait Mortal {
 trait Meelee
 
 //Able to push stuff todo should have a set value of number of movables it can push
-trait Pusher {
-  var ableToPush = 1
-}
+trait Pusher 
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {

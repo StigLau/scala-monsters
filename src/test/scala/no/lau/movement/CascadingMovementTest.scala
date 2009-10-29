@@ -41,7 +41,6 @@ class CascadingMovementTest {
 
   @Test def cascadingMovementTest() {
     val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {
-      ableToPush = 2
       currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
