@@ -40,7 +40,9 @@ class CascadingMovementTest {
   }
 
   @Test def cascadingMovementTest() {
-    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {
+      ableToPush = 2
+      currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
       "....\n" +
@@ -48,7 +50,7 @@ class CascadingMovementTest {
       "..W.\n")
   }
 
-  @Test def erronousMovementRightOverTheBoarder() {
+  @Test def erronousMovementPushTwoBlocksRightOverTheBoarder() {
     val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
@@ -79,7 +81,7 @@ class SqueezingTest {
       val currentGameBoard = game.currentGameBoard
 
     val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") with Movable {currentGameBoard += (2, 0) -> this}
+    val offer = new Monster(game, "Offer") with Movable with Mortal {currentGameBoard += (2, 0) -> this}
 
     assertEquals ("HBHB\n", game printableBoard)
     leif move (Right)

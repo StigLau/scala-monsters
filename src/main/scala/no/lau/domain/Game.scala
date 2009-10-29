@@ -142,6 +142,7 @@ trait Movable extends GamePiece {
       case mortal: Mortal => {
         this match {
           case meelee:Meelee => mortal.kill
+          case block:Block => println("What is this block showing up here?")
         }
         //todo Not sure what should be done for squeezing
         /*
@@ -154,10 +155,29 @@ trait Movable extends GamePiece {
         }
         if(!wasSqueezed) throw IllegalMoveException("Nothing to be squeezed against")
         */
-      }
-      case movable: Movable => this match {
-        case pusher:Pusher => movable.move(inThatDirection)
-        case _ => throw IllegalMoveException("Not allowed to push") 
+      } //todo WAAAY ugly hack for squeezing monsters
+      case movable: Movable => {
+        //Code for squishing
+        //Pusher B
+        val secondPlace = (newLocation._1 + inThatDirection.dir._1, newLocation._2 + inThatDirection.dir._2)
+        //Pusher B Mortal
+        if (whosInMyWay(secondPlace).isInstanceOf[Mortal]) {
+          whosInMyWay(secondPlace) match {
+            case mortal: Mortal => {
+              val thirdPlace = (secondPlace._1 + inThatDirection.dir._1, secondPlace._2 + inThatDirection.dir._2)
+              whosInMyWay(thirdPlace) match {
+                case gp:GamePiece => mortal.kill; movable.move(inThatDirection)
+                case None => throw new IllegalMoveException("This code has to be checked!")
+              }
+            }
+          }
+        }
+        else {
+          this match {
+            case pusher: Pusher => movable.move(inThatDirection)
+            case _ => throw IllegalMoveException("Not allowed to push")
+          }
+        }
       }
       case gamePiece: GamePiece => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       case None =>
@@ -188,7 +208,9 @@ trait Mortal {
 trait Meelee
 
 //Able to push stuff todo should have a set value of number of movables it can push
-trait Pusher
+trait Pusher {
+  var ableToPush = 1
+}
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {
