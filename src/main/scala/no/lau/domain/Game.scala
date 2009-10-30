@@ -77,7 +77,10 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   //todo if two monsters wish to move to the same tile, a ArrayIndexOutOfBoundsException: -1 can be thrown! Needs to be fixed 
   def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Tuple2[Int, Int], GamePiece]): Tuple2[Int, Int] = {
     val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
-    gameBoard.keySet.toArray(foundItAt)
+    if(foundItAt != -1)
+      gameBoard.keySet.toArray(foundItAt)
+    else
+      throw new IllegalMoveException("Houston - we have a problem - ArrayIndexOutOfBoundsException: -1")
   }
 
   def printableBoard = {
@@ -119,17 +122,9 @@ trait Movable extends GamePiece {
   /**
    * Used for moving gamepieces around the gameBoard
    * If the route ends up in an illegal move at one stage, the movement will be dropped and an IllegalMovementException will be thrown
-   * todo should probably return new location
    **/
 
   def move(inThatDirection: Direction) {
-    val oldLocation = game.whereIs(this, game.previousGameBoard)
-    val newLocation = tryToMove(inThatDirection)
-    move(oldLocation, newLocation)
-  }
-
-
-  def tryToMove(inThatDirection: Direction):Tuple2[Int, Int] = {
     val oldLocation = game.whereIs(this, game.previousGameBoard)
 
     val newLocation = goingTowards(oldLocation, inThatDirection)
@@ -179,7 +174,7 @@ trait Movable extends GamePiece {
       case Some(gamePiece: GamePiece) => throw IllegalMoveException("Trying to move unmovable Gamepiece")
       case None =>
     }
-    newLocation
+    move(oldLocation, newLocation)
   }
 
   private def goingTowards(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Tuple2[Int, Int] = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
