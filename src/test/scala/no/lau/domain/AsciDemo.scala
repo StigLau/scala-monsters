@@ -1,10 +1,9 @@
 package no.lau.domain
 
 import java.io.{InputStreamReader}
-import no.lau.domain.movement._
-import no.lau.movement.{AsymmetricGamingInterface, VerySimpleClock}
 import actors.Actor
 import actors.Actor.loop
+import no.lau.movement._
 
 /**
  * Test used for setting up and testing that the game holds together. 
