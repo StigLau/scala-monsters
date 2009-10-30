@@ -12,7 +12,7 @@ The game is envisioned to be hub'n'spoke, where the server manages the games leg
 h1. Requirements
 Scala Monsters requires Java and Maven 2 installed
 
-h1. Running the game
+== Running the game ==
 From a command line;  
 mvn scala:run -DmainClass=no.lau.domain.UI
 
