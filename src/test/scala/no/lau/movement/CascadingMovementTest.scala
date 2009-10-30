@@ -75,7 +75,7 @@ class CascadingMovementTest {
 
 class SqueezingTest {
   @Test def squeezingMonster() {
-    val game = new Game(3, 0) {
+    val game = new Game(4, 0) {
         currentGameBoard += (1, 0) -> Block(this, "a")
         currentGameBoard += (3, 0) -> Block(this, "b")
       }
@@ -90,9 +90,9 @@ class SqueezingTest {
       override def toString = "V"
     }
 
-    assertEquals ("PBVB\n", game printableBoard)
+    assertEquals ("PBVB.\n", game printableBoard)
     pusher move (Right)
-    assertEquals (".PBB\n", game printableBoard)
+    assertEquals (".PBB.\n", game printableBoard)
   }
 
   @Test def squeezingMonsterAgainstThinAirFails() {

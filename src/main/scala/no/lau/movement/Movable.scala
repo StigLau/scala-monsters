@@ -28,10 +28,10 @@ trait Movable extends GamePiece {
       throw IllegalMoveException("Move caused movable to travel across the border")
 
     movement match {
-      case (pusher:Pusher, Some(movable:Movable), Some(victim:Mortal), Some(gp:GamePiece)) => victim.kill; game.currentGameBoard -= thirdPlace; movable.move(inThatDirection) //Squishing
+      case (pusher:Pusher, Some(movable:Movable), Some(victim:Mortal), Some(gp:GamePiece)) => victim.kill; game.currentGameBoard -= thirdPlace; movable.move(secondPlace, thirdPlace) //Squishing
       case (offender:Meelee, Some(victim:Mortal), _, _) => println("We have a " + offender + " attacking a " + victim); victim.kill
       case (pusher: Pusher, Some(movable:Movable), _, _) => movable.move(inThatDirection)
-      //case (_, Some(movable:Movable), _, _) => movable.move(inThatDirection) // Moving blocks
+      //case (_, Some(movable:Movable), _, _) => movable.move(inThatDirection) // Moving multiple blocks - This is problematic in combination with squishing
       case (movable:Movable, None, _, _) => //Continue with your move
       case (_, Some(gamePiece: GamePiece), _, _) => throw IllegalMoveException("Trying to move unmovable Gamepiece")
     }
