@@ -26,11 +26,13 @@ http://www.identicalsoftware.com/ogs/2000/beasts.html
 http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
- * Prioritized todo list:
+h2. Prioritized todo list:
+ * Handle crashes - IE multiple monsters wishing to move to the same space in time
  * implement exploding static walls
  * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
  * Capture the flag or similar
  * Monster who can push/squish
  * Property of the game how many cascading moves a monster can create
- * Handle crashes - IE multiple monsters wishing to move to the same space in time
 
+h2. Known bugs
+ * Cannot push multiple blocks. Have to implement a pusher "Strength" to indicate the number of available pushes. Although this is not a requirement of Beasts, it could be interesting to implement at a later stage for a different kind of game.

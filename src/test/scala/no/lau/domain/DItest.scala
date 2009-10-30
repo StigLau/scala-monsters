@@ -1,4 +1,4 @@
-import no.lau.domain.movement.{Up, Direction}
+import no.lau.movement.{Up, Direction}
 
 
 

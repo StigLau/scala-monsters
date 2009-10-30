@@ -1,4 +1,4 @@
-package no.lau.domain.movement
+package no.lau.movement
 
 import no.lau.domain._
 import org.junit.Assert._
@@ -39,9 +39,9 @@ class CascadingMovementTest {
       "..W.\n")
   }
 
-  @Test def cascadingMovementTest() {
+  //@Test moving two blocks is not implemented yet 
+  def cascadingMovementTest() {
     val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {
-      ableToPush = 2
       currentGameBoard += (0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
@@ -50,7 +50,8 @@ class CascadingMovementTest {
       "..W.\n")
   }
 
-  @Test def erronousMovementPushTwoBlocksRightOverTheBoarder() {
+  //@Test moving two blocks is not implemented yet
+  def erronousMovementPushTwoBlocksRightOverTheBoarder() {
     val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
@@ -74,18 +75,24 @@ class CascadingMovementTest {
 
 class SqueezingTest {
   @Test def squeezingMonster() {
-    val game = new Game(3, 0) {
+    val game = new Game(4, 0) {
         currentGameBoard += (1, 0) -> Block(this, "a")
         currentGameBoard += (3, 0) -> Block(this, "b")
       }
       val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") with Movable with Mortal {currentGameBoard += (2, 0) -> this}
+    val pusher = new Monster(game, "Pusher") with Movable with Pusher {
+      currentGameBoard += (0, 0) -> this
+      override def toString = "P"
+    }
+    val victim = new Monster(game, "Victim") with Movable with Mortal {
+      currentGameBoard += (2, 0) -> this
+      override def toString = "V"
+    }
 
-    assertEquals ("HBHB\n", game printableBoard)
-    leif move (Right)
-    assertEquals (".HBB\n", game printableBoard)
+    assertEquals ("PBVB.\n", game printableBoard)
+    pusher move (Right)
+    assertEquals (".PBB.\n", game printableBoard)
   }
 
   @Test def squeezingMonsterAgainstThinAirFails() {
@@ -157,25 +164,22 @@ class ClockedMovementTest {
 
   @Test
   def RamTest {
-    val game = new Game(3, 3) {
-        //currentGameBoard += (3, 0) -> Block(this, "b")
-      }
-      val currentGameBoard = game.currentGameBoard
+    val game = new Game(3, 3)
 
-    val leif = new Monster(game, "MonsterLeif") with Movable {currentGameBoard += (0, 0) -> this}
-    val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") {currentGameBoard += (3, 3) -> this}
+    val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") with Meelee {
+      game.currentGameBoard += (3, 3) -> this
+      override def toString = "R"
+    }
+    val victim = new Monster(game, "Victim") with Mortal {
+      game.currentGameBoard += (0, 0) -> this
+      override def toString = "V"
+    }
 
-    for ( step <- 0 to 10) {
+    for ( step <- 0 to 5) {
       println(game.printableBoard)
       val direction = rammstein.findPathTo(rammstein.enemies.head)
       println("Going " + direction)
       rammstein.move(direction)
     }
-
-    /*
-    rammstein.tick
-    rammstein.findEnemies
-    */
   }
-
 }

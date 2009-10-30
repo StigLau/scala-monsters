@@ -1,13 +1,10 @@
 package no.lau.domain
 
-import no.lau.domain.movement._
-
 import java.awt.Font
-
 import scala.swing._
 import javax.swing.{InputMap, SwingUtilities, JComponent, KeyStroke, ActionMap}
-import no.lau.movement.{VerySimpleClock, AsymmetricGamingInterface}
 import no.lau.monsters.RammingMonster
+import no.lau.movement._
 
 /**
  * @author: beiske
@@ -17,7 +14,7 @@ import no.lau.monsters.RammingMonster
 object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
-   1 to 100 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+   1 to 300 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
 
    val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
@@ -47,11 +44,11 @@ object UI extends SimpleGUIApplication {
 
   val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") with Pusher
   game.addRandomly(rammstein)
-  //clock.addTickListener(rammstein)
+  clock.addTickListener(rammstein)
 
   val rammy = new RammingMonster(game, "Rammy, the ramming monster")
   game.addRandomly(rammy)
-  //clock.addTickListener(rammy)
+  clock.addTickListener(rammy)
 
   directionHub.start
   clock.start

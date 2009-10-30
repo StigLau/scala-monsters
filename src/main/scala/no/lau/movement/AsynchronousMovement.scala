@@ -1,7 +1,6 @@
 package no.lau.movement
 import actors.Actor
 import actors.Actor._
-import no.lau.domain.movement.{Movable, Up, Direction, StackableMovement}
 import no.lau.domain.Game
 
 class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Actor {

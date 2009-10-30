@@ -1,8 +1,7 @@
 package no.lau.monsters
 
-import no.lau.movement.TickListener
-import no.lau.domain.{GamePiece, Game, Monster}
-import no.lau.domain.movement._
+import no.lau.movement._
+import no.lau.domain._
 
 /**
  * This code is an ugly hack for getting a first version up and running :)
