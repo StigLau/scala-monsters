@@ -81,12 +81,18 @@ class SqueezingTest {
       }
       val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game, "MonsterLeif") with Movable with Pusher {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game, "Offer") with Movable with Mortal {currentGameBoard += (2, 0) -> this}
+    val pusher = new Monster(game, "Pusher") with Movable with Pusher {
+      currentGameBoard += (0, 0) -> this
+      override def toString = "P"
+    }
+    val victim = new Monster(game, "Victim") with Movable with Mortal {
+      currentGameBoard += (2, 0) -> this
+      override def toString = "V"
+    }
 
-    assertEquals ("HBHB\n", game printableBoard)
-    leif move (Right)
-    assertEquals (".HBB\n", game printableBoard)
+    assertEquals ("PBVB\n", game printableBoard)
+    pusher move (Right)
+    assertEquals (".PBB\n", game printableBoard)
   }
 
   @Test def squeezingMonsterAgainstThinAirFails() {

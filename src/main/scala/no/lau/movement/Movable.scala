@@ -14,62 +14,31 @@ trait Movable extends GamePiece {
   /**
    * Used for moving gamepieces around the gameBoard
    * If the route ends up in an illegal move at one stage, the movement will be dropped and an IllegalMovementException will be thrown
+   * The route can consist of up to four GamePieces to do checks
+   * todo working with Tuple2[x, y] is not as it should be. Should be working with the objects, and some places ask where they are located.
    **/
-
   def move(inThatDirection: Direction) {
-    val oldLocation = game.whereIs(this, game.previousGameBoard)
-    val newLocation = goingTowards(oldLocation, inThatDirection)
+    val firstPlace = game.whereIs(this, game.previousGameBoard)
+    val secondPlace = goingTowards(firstPlace, inThatDirection)
+    val thirdPlace = goingTowards(secondPlace, inThatDirection)
+    val fourthPlace = goingTowards(thirdPlace, inThatDirection)
+    val movement = (this, whosInMyWay(secondPlace), whosInMyWay(thirdPlace), whosInMyWay(fourthPlace))
 
-    if (isOverBorder(newLocation))
+    if (isOverBorder(secondPlace))
       throw IllegalMoveException("Move caused movable to travel across the border")
 
-    //Is this the correct way to do this?
-    whoIsAtNewLocation(oldLocation, inThatDirection) match {
-      case Some(mortal: Mortal) => {
-        this match {
-          case meelee:Meelee => mortal.kill
-          case block:Block => println("What is this block showing up here? Is the killee removed from the board?")
-          case _ => throw IllegalMoveException("No Meelee trait!")
-        }
-        //todo Not sure what should be done for squeezing
-        /*
-        val wasSqueezed = try {
-          mortal match {
-            case movable:Movable => movable.tryToMove(inThatDirection); false}
-          }
-        catch {
-          case ime: IllegalMoveException => mortal kill; true
-        }
-        if(!wasSqueezed) throw IllegalMoveException("Nothing to be squeezed against")
-        */
-      } //todo WAAAY ugly hack for squeezing monsters
-      case Some(movable: Movable) => {
-        //Code for squishing
-        //Sequence for a squish: Pusher -> Movable -> Mortal -> GamePiece or  HBHB -> .HBB
-        //val secondPlace = (newLocation._1 + inThatDirection.dir._1, newLocation._2 + inThatDirection.dir._2)
-        //Pusher B Mortal
-        val second = whoIsAtNewLocation(movable.whereAreYou, inThatDirection)
-        if (second.isInstanceOf[Mortal]) {
-          whoIsAtNewLocation(movable.whereAreYou, inThatDirection) match {
-            case Some(gp: GamePiece) => second.asInstanceOf[Mortal].kill; movable.move(inThatDirection)
-            case None => throw new IllegalMoveException("This code has to be checked!")
-          }
-        }
-        else {
-          this match {
-            case pusher: Pusher => movable.move(inThatDirection)
-            case _ => throw IllegalMoveException("Not allowed to push")
-          }
-        }
-      }
-      case Some(gamePiece: GamePiece) => throw IllegalMoveException("Trying to move unmovable Gamepiece")
-      case None =>
+    movement match {
+      case (pusher:Pusher, Some(movable:Movable), Some(victim:Mortal), Some(gp:GamePiece)) => victim.kill; game.currentGameBoard -= thirdPlace; movable.move(inThatDirection) //Squishing
+      case (offender:Meelee, Some(victim:Mortal), _, _) => println("We have a " + offender + " attacking a " + victim); victim.kill
+      case (pusher: Pusher, Some(movable:Movable), _, _) => movable.move(inThatDirection)
+      //case (_, Some(movable:Movable), _, _) => movable.move(inThatDirection) // Moving blocks
+      case (movable:Movable, None, _, _) => //Continue with your move
+      case (_, Some(gamePiece: GamePiece), _, _) => throw IllegalMoveException("Trying to move unmovable Gamepiece")
     }
-    move(oldLocation, newLocation)
+    move(firstPlace, secondPlace)
   }
 
   private def goingTowards(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Tuple2[Int, Int] = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
-  private def whoIsAtNewLocation(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Option[GamePiece] = whosInMyWay(goingTowards(oldLocation, inThatDirection))
 
   private def whosInMyWay(newLocation:Tuple2[Int, Int]):Option[GamePiece] = game.previousGameBoard.get(newLocation)
 
