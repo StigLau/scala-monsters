@@ -14,7 +14,7 @@ import no.lau.movement._
 object UI extends SimpleGUIApplication {
    val game = Game(40, 25)
    val rnd = new scala.util.Random
-   1 to 300 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+   1 to 1 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
 
    val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
@@ -42,11 +42,26 @@ object UI extends SimpleGUIApplication {
      }
    }
 
-  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") with Pusher
+  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") //with Pusher 
+  {
+    override def kill() {
+      super.kill()
+      isKilled = true
+      println("I'm meeelting!")
+      clock.removeTickListener(this)
+    }
+  }
   game.addRandomly(rammstein)
   clock.addTickListener(rammstein)
 
-  val rammy = new RammingMonster(game, "Rammy, the ramming monster")
+  val rammy = new RammingMonster(game, "Rammy, the ramming monster") {
+    override def kill() {
+      super.kill()
+      isKilled = true
+      println("I'm meeelting!")
+      clock.removeTickListener(this)
+    }
+  }
   game.addRandomly(rammy)
   clock.addTickListener(rammy)
 

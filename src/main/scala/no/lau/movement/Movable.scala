@@ -18,7 +18,7 @@ trait Movable extends GamePiece {
    * todo working with Tuple2[x, y] is not as it should be. Should be working with the objects, and some places ask where they are located.
    **/
   def move(inThatDirection: Direction) {
-    val firstPlace = game.whereIs(this, game.previousGameBoard)
+    val firstPlace = game.whereIs(this, game.previousGameBoard).get
     val secondPlace = goingTowards(firstPlace, inThatDirection)
     val thirdPlace = goingTowards(secondPlace, inThatDirection)
     val fourthPlace = goingTowards(thirdPlace, inThatDirection)

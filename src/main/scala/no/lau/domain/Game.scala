@@ -70,13 +70,12 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
 
   def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
 
-  //todo if two monsters wish to move to the same tile, a ArrayIndexOutOfBoundsException: -1 can be thrown! Needs to be fixed 
-  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Tuple2[Int, Int], GamePiece]): Tuple2[Int, Int] = {
+  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Tuple2[Int, Int], GamePiece]): Option[Tuple2[Int, Int]] = {
     val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
     if(foundItAt != -1)
-      gameBoard.keySet.toArray(foundItAt)
+      Some(gameBoard.keySet.toArray(foundItAt))
     else
-      throw new IllegalMoveException("Houston - we have a problem - ArrayIndexOutOfBoundsException: -1")
+      None
   }
 
   def printableBoard = {
