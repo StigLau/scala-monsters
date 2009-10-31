@@ -22,29 +22,25 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
   def newTurn = {
     gameBoards = cloneCurrent :: gameBoards
     for(gamePiece <- previousGameBoard.values) {
-      gamePiece match {
-        case stackable: StackableMovement => {
-          stackable match {
-            case movable: Movable => {
+      (gamePiece, gamePiece) match {
+        case (stackable: StackableMovement, movable: Movable) => {
 
-              if(stackable.movementStack.size > 0) println(stackable.movementStack)
+          if (stackable.movementStack.size > 0) println(stackable.movementStack)
 
-              stackable.movementStack.firstOption match {
-                case Some(direction) => {
-                  try {
-                    movable.move(direction)
-                    stackable.movementStack = stackable.movementStack.tail
-                  } catch {
-                    case ime: IllegalMoveException => {
-                      println("Illegal Move for " + movable + ": "+ ime.getMessage)
-                      stackable.movementStack = List()
-                      stackable.progressionHalted
-                    }
-                  }
+          stackable.movementStack.firstOption match {
+            case Some(direction) => {
+              try {
+                movable.move(direction)
+                stackable.movementStack = stackable.movementStack.tail
+              } catch {
+                case ime: IllegalMoveException => {
+                  println("Illegal Move for " + movable + ": " + ime.getMessage)
+                  stackable.movementStack = List()
+                  stackable.progressionHalted
                 }
-                case None =>
               }
             }
+            case None =>
           }
         }
         case _ =>
