@@ -20,6 +20,7 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
 
   var tickListeners:List[TickListener] = List()
   def addTickListener(newListener:TickListener) { tickListeners = newListener :: tickListeners }
+  def removeTickListener(toBeRemoved:TickListener) { tickListeners -= toBeRemoved }
 }
 
 class AsymmetricGamingInterface(game: Game, stackableMovable: StackableMovement) extends Actor {

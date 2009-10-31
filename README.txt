@@ -27,6 +27,7 @@ http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
 h2. Prioritized todo list:
+ * Edit interface of Mortal in some way - if you have tickListener and are killable, the ticklistener should be removed, and you should yourself be removed from the board. Today, your ghost can still be hanging around on the board. 
  * Handle crashes - IE multiple monsters wishing to move to the same space in time
  * implement exploding static walls
  * The game can be extended to be a american football game where one user controls multiple monsters which battle a oppositioning team, bent on mutual distruction with obstacles lying around the field.
