@@ -20,7 +20,7 @@ object AsciDemo {
 
     val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement
     game.addRandomly(monsterGunnar)
-    val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
+    val directionHub = new AsymmetricGamingImpl(game, monsterGunnar)
     directionHub.start
     new KeyboardHandler(directionHub).start
 

@@ -2,7 +2,7 @@ package no.lau.domain
 
 import java.awt.Font
 import scala.swing._
-import javax.swing.{InputMap, SwingUtilities, JComponent, KeyStroke, ActionMap}
+import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
 import no.lau.monsters.RammingMonster
 import no.lau.movement._
 
@@ -12,8 +12,8 @@ import no.lau.movement._
  */
 
 object UI extends SimpleGUIApplication {
-  var game:Game = null
-  var directionHub:AsymmetricGamingInterface = null
+  var game =  GameConfiguration.myGame(printGameBoard)
+  var directionHub = GameConfiguration.directionHub
 
    def top = new MainFrame {
      contents = new BorderPanel {
@@ -24,13 +24,15 @@ object UI extends SimpleGUIApplication {
   val gameBoard = new TextArea() {
     editable = false
 
-    populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
-    populateActionMap(peer.getActionMap(), directionHub)
+    KeyStrokeHandler.populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
+    KeyStrokeHandler.populateActionMap(peer.getActionMap(), directionHub)
     peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
   }
-  
-  def printGameBoard(): Unit = {gameBoard.text = game printableBoard}
 
+  def printGameBoard(): Unit = {gameBoard.text = game printableBoard}
+}
+
+object KeyStrokeHandler {
   def populateInputMap(inputMap: InputMap) {
     inputMap.put(KeyStroke.getKeyStroke("UP"), "up")
     inputMap.put(KeyStroke.getKeyStroke("DOWN"), "down")
@@ -44,62 +46,38 @@ object UI extends SimpleGUIApplication {
     actionMap.put("left", Action("KeyPressed") {gamingInterface ! Left}.peer)
     actionMap.put("right", Action("KeyPressed") {gamingInterface ! Right}.peer)
   }
-
-  override def main(args: Array[String]) = {
-    game = SetupGame.myCharacter(printGameBoard)
-    directionHub = SetupGame.directionHub
-
-    
-    SwingUtilities.invokeLater {
-      new Runnable {def run() {init(); top.pack(); top.visible = true}}
-    }
-  }
 }
 
-
-object SetupGame {
+object GameConfiguration {
   val game = Game(40, 25)
-  val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
-  val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
+  val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
     override def toString = ""
   }
+  val directionHub = new AsymmetricGamingImpl(game, player)
 
-  def myCharacter(callback: () => Unit) = {
-    val rnd = new scala.util.Random
-    1 to 1 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
-    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
-
-
-    game.addRandomly(monsterGunnar)
-
+  def myGame(callback: () => Unit) = {
     val clock = new VerySimpleClock(game, 200, callback)
 
-    val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") //with Pusher
-    {
-      override def kill() {
-        super.kill()
-        isKilled = true
-        println("I'm meeelting!")
-        clock.removeTickListener(this)
-      }
+    val rnd = new scala.util.Random
+    1 to 10 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+    1 to 10 foreach { arg =>
+              val monster = new RammingMonster(game, "Monster " + rnd.nextInt()) {
+                override def kill() {
+                  super.kill()
+                  clock.removeTickListener(this)
+                }
+              }
+              game.addRandomly(monster)
+              clock.addTickListener(monster)
     }
-    game.addRandomly(rammstein)
-    clock.addTickListener(rammstein)
-
-    val rammy = new RammingMonster(game, "Rammy, the ramming monster") {
-      override def kill() {
-        super.kill()
-        isKilled = true
-        println("I'm meeelting!")
-        clock.removeTickListener(this)
-      }
-    }
-    game.addRandomly(rammy)
-    clock.addTickListener(rammy)
+    game.addRandomly(player)
 
     directionHub.start
     clock.start
-
     game
   }
+}
+
+object GUIStarter {
+  def main(args: Array[String]) = UI.main(null)
 }

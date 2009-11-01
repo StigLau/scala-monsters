@@ -101,6 +101,7 @@ case class StaticWall() extends GamePiece {override def toString = "W"}
 
 /**
  * Marks that a gamePiece can be killed
+ * todo Killing is not yet implemented well enough - Killing should ensure that the monster removes itself from the map
  */
 trait Mortal {
   var isKilled = false
