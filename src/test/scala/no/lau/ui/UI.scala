@@ -12,29 +12,8 @@ import no.lau.movement._
  */
 
 object UI extends SimpleGUIApplication {
-   val game = Game(40, 25)
-   val rnd = new scala.util.Random
-   1 to 1 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
-   //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
-
-   val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
-     override def toString = ""
-   }
-   game.addRandomly(monsterGunnar)
-
-    val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
-    def printGameBoard(): Unit = { gameBoard.text = game printableBoard }
-    val clock = new VerySimpleClock(game, 200, printGameBoard)
-
-
-   val gameBoard = new TextArea(){
-     editable = false
-     text = game printableBoard
-
-     populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
-     populateActionMap(peer.getActionMap(), directionHub)
-     peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
-   }
+  var game:Game = null
+  var directionHub:AsymmetricGamingInterface = null
 
    def top = new MainFrame {
      contents = new BorderPanel {
@@ -42,31 +21,15 @@ object UI extends SimpleGUIApplication {
      }
    }
 
-  val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") //with Pusher 
-  {
-    override def kill() {
-      super.kill()
-      isKilled = true
-      println("I'm meeelting!")
-      clock.removeTickListener(this)
-    }
-  }
-  game.addRandomly(rammstein)
-  clock.addTickListener(rammstein)
+  val gameBoard = new TextArea() {
+    editable = false
 
-  val rammy = new RammingMonster(game, "Rammy, the ramming monster") {
-    override def kill() {
-      super.kill()
-      isKilled = true
-      println("I'm meeelting!")
-      clock.removeTickListener(this)
-    }
+    populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
+    populateActionMap(peer.getActionMap(), directionHub)
+    peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
   }
-  game.addRandomly(rammy)
-  clock.addTickListener(rammy)
-
-  directionHub.start
-  clock.start
+  
+  def printGameBoard(): Unit = {gameBoard.text = game printableBoard}
 
   def populateInputMap(inputMap: InputMap) {
     inputMap.put(KeyStroke.getKeyStroke("UP"), "up")
@@ -83,9 +46,60 @@ object UI extends SimpleGUIApplication {
   }
 
   override def main(args: Array[String]) = {
+    game = SetupGame.myCharacter(printGameBoard)
+    directionHub = SetupGame.directionHub
+
+    
     SwingUtilities.invokeLater {
       new Runnable {def run() {init(); top.pack(); top.visible = true}}
     }
   }
 }
 
+
+object SetupGame {
+  val game = Game(40, 25)
+  val directionHub = new AsymmetricGamingInterface(game, monsterGunnar)
+  val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
+    override def toString = ""
+  }
+
+  def myCharacter(callback: () => Unit) = {
+    val rnd = new scala.util.Random
+    1 to 1 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+    //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
+
+
+    game.addRandomly(monsterGunnar)
+
+    val clock = new VerySimpleClock(game, 200, callback)
+
+    val rammstein = new RammingMonster(game, "Rammstein, the ramming monster") //with Pusher
+    {
+      override def kill() {
+        super.kill()
+        isKilled = true
+        println("I'm meeelting!")
+        clock.removeTickListener(this)
+      }
+    }
+    game.addRandomly(rammstein)
+    clock.addTickListener(rammstein)
+
+    val rammy = new RammingMonster(game, "Rammy, the ramming monster") {
+      override def kill() {
+        super.kill()
+        isKilled = true
+        println("I'm meeelting!")
+        clock.removeTickListener(this)
+      }
+    }
+    game.addRandomly(rammy)
+    clock.addTickListener(rammy)
+
+    directionHub.start
+    clock.start
+
+    game
+  }
+}
