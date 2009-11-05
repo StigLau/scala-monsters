@@ -23,7 +23,9 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
   def removeTickListener(toBeRemoved:TickListener) { tickListeners -= toBeRemoved }
 }
 
-class AsymmetricGamingInterface(game: Game, stackableMovable: StackableMovement) extends Actor {
+trait AsymmetricGamingInterface extends Actor
+
+class AsymmetricGamingImpl(game: Game, stackableMovable: StackableMovement) extends AsymmetricGamingInterface {
   def act() {
     loop {
       react {
