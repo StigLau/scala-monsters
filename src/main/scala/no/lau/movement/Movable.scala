@@ -5,7 +5,7 @@ import no.lau.domain._
 trait StackableMovement extends Movable {
   var movementStack:List[Direction] = List()
   def stackMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
-  def progressionHalted { println("Further progression halted") } //todo implement what clients should do when progression halts
+  def progressionHalted { /* println("Further progression halted") */} //todo implement what clients should do when progression halts
 }
 
 trait Movable extends GamePiece {

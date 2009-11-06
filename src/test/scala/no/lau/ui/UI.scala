@@ -14,13 +14,11 @@ import no.lau.predefined.{Config, LevelEasyC}
 object UI extends SimpleGUIApplication {
   val config:Config = new Config() {
     val game = Game(40, 25)
-    val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
-      override def toString = ""
-    }
+    val player = new Monster(game, "MonsterGunnar") with Player with StackableMovement with Mortal with Pusher 
   }
   val directionHub = new AsymmetricGamingImpl(config.game, config.player)
   val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
-  config.gameConfig(clock)
+  config.gameConfig(clock, LevelEasyC.level)
   directionHub.start
   clock.start
 

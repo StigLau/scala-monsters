@@ -19,7 +19,7 @@ class RammingMonster(game: Game, id: Any) extends Monster(game, id) with Stackab
     }
   }
 
-  def enemies:List[GamePiece] = game.currentGameBoard.values.filter((x: GamePiece) => x.isInstanceOf[Monster] && x != this).toList
+  def enemies:List[GamePiece] = game.currentGameBoard.values.filter((x: GamePiece) => x.isInstanceOf[Player] && x != this).toList
 
   def findPathTo(enemy: GamePiece): Option[Direction] = {
     val iAmHereOption = game.whereIs(this, game.currentGameBoard)

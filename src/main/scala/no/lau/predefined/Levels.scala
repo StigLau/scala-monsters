@@ -26,25 +26,16 @@ object LevelEasyB {
 
 object LevelEasyC {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 3)
-
-  val game = Game(40, 25)
-
-  val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
-    override def toString = ""
-  }
 }
 
 trait Config{
   val player:Monster with StackableMovement
   val game:Game
-  def gameConfig(clock:Clock) = {
-    1 to 10 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
-    1 to 10 foreach { arg =>
+  def gameConfig(clock:Clock, level:Levels) = {
+    1 to 250 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
+    1 to level.startingBeasts foreach { arg =>
               val monster = new RammingMonster(game, "monster " + arg) {
-                override def kill() {
-                  super.kill()
-                  clock.removeTickListener(this)
-                }
+                override def kill { clock.removeTickListener(this) } 
               }
               game.addRandomly(monster)
               clock.addTickListener(monster)
@@ -53,21 +44,3 @@ trait Config{
   }
 
 }
-
-
-/*
-class TestLevels {
-  @Test
-  def testRunningLevels {
-    val game = Game(40, 25)
-   val rnd = new scala.util.Random
-   1 to 1 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
-   //1 to 10 foreach {arg => game.addRandomly(Monster(game, "monster" + rnd.nextInt()))}
-
-   val monsterGunnar = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
-     override def toString = ""
-   }
-  }
-} */
-
-
