@@ -16,22 +16,23 @@ case class Levels(
         hatchingSpeed:Int,
         startingBeasts:Int)
 
-object LevelEasyA {
+abstract class LevelEasyA extends Config {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 1)
 }
 
-object LevelEasyB {
+abstract class LevelEasyB extends Config {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 2)
 }
 
-object LevelEasyC {
+abstract class LevelEasyC extends Config {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 3)
 }
 
 trait Config{
   val player:Monster with StackableMovement
   val game:Game
-  def gameConfig(clock:Clock, level:Levels) = {
+  val level:Levels
+  def gameConfig(clock:Clock) = {
     1 to 250 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
     1 to level.startingBeasts foreach { arg =>
               val monster = new RammingMonster(game, "monster " + arg) {

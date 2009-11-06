@@ -29,11 +29,11 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
 
 trait AsymmetricGamingInterface extends Actor
 
-class AsymmetricGamingImpl(game: Game, stackableMovable: StackableMovement) extends AsymmetricGamingInterface {
+class AsymmetricGamingImpl(mover: StackableMovement) extends AsymmetricGamingInterface {
   def act() {
     loop {
       react {
-        case direction: Direction => stackableMovable.stackMovement(direction)
+        case direction: Direction => mover.stackMovement(direction)
         case _ => println("No direction")
       }
     }

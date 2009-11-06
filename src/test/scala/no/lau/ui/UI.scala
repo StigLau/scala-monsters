@@ -4,7 +4,7 @@ import java.awt.Font
 import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
 import no.lau.movement._
-import no.lau.predefined.{Config, LevelEasyC}
+import no.lau.predefined.{LevelEasyC, LevelEasyB, Config}
 
 /**
  * @author: beiske
@@ -12,13 +12,13 @@ import no.lau.predefined.{Config, LevelEasyC}
  */
 
 object UI extends SimpleGUIApplication {
-  val config:Config = new Config() {
+  val config:Config = new LevelEasyC() {
     val game = Game(40, 25)
-    val player = new Monster(game, "MonsterGunnar") with Player with StackableMovement with Mortal with Pusher 
+    val player = new Monster(game, "MonsterGunnar") with Player with StackableMovement with Mortal with Pusher
   }
-  val directionHub = new AsymmetricGamingImpl(config.game, config.player)
+  val directionHub = new AsymmetricGamingImpl(config.player)
   val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
-  config.gameConfig(clock, LevelEasyC.level)
+  config.gameConfig(clock)
   directionHub.start
   clock.start
 
