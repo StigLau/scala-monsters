@@ -5,6 +5,7 @@ import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
 import no.lau.monsters.RammingMonster
 import no.lau.movement._
+import no.lau.predefined.{LevelEasyC}
 
 /**
  * @author: beiske
@@ -12,7 +13,8 @@ import no.lau.movement._
  */
 
 object UI extends SimpleGUIApplication {
-  var game =  GameConfiguration.myGame(printGameBoard)
+  var game =  GameConfiguration.gameConfig(printGameBoardCallback)
+  //var game =  LevelEasyC.gameConfig(printGameBoardCallback)
   var directionHub = GameConfiguration.directionHub
 
    def top = new MainFrame {
@@ -29,7 +31,7 @@ object UI extends SimpleGUIApplication {
     peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
   }
 
-  def printGameBoard(): Unit = {gameBoard.text = game printableBoard}
+  def printGameBoardCallback(): Unit = {gameBoard.text = game printableBoard}
 }
 
 object KeyStrokeHandler {
@@ -55,13 +57,12 @@ object GameConfiguration {
   }
   val directionHub = new AsymmetricGamingImpl(game, player)
 
-  def myGame(callback: () => Unit) = {
+  def gameConfig(callback: () => Unit) = {
     val clock = new VerySimpleClock(game, 200, callback)
 
-    val rnd = new scala.util.Random
-    1 to 10 foreach {arg => game.addRandomly(Block(game, "a" + rnd.nextInt()))}
+    1 to 10 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
     1 to 10 foreach { arg =>
-              val monster = new RammingMonster(game, "Monster " + rnd.nextInt()) {
+              val monster = new RammingMonster(game, "monster " + arg) {
                 override def kill() {
                   super.kill()
                   clock.removeTickListener(this)

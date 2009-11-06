@@ -1,6 +1,7 @@
 package no.lau.predefined
 
-import org.junit.Test
+import no.lau.movement.StackableMovement
+import no.lau.domain._
 
 /**
  * Settings of each level according to the original Beasts Game
@@ -24,6 +25,12 @@ object LevelEasyB {
 
 object LevelEasyC {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 3)
+
+  val game = Game(40, 25)
+
+  val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
+    override def toString = ""
+  }
 }
 
 /*
@@ -40,3 +47,5 @@ class TestLevels {
    }
   }
 } */
+
+
