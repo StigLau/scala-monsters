@@ -170,7 +170,7 @@ class ClockedMovementTest {
       game.currentGameBoard += (3, 3) -> this
       override def toString = "R"
     }
-    val victim = new Monster(game, "Victim") with Mortal {
+    val victim = new Monster(game, "Victim") with Player with Mortal {
       game.currentGameBoard += (0, 0) -> this
       override def toString = "V"
     }

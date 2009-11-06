@@ -36,7 +36,7 @@ trait Config{
     1 to 250 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
     1 to level.startingBeasts foreach { arg =>
               val monster = new RammingMonster(game, "monster " + arg) {
-                override def kill { clock.removeTickListener(this) } 
+                override def kill { clock.removeTickListener(this) }
               }
               game.addRandomly(monster)
               clock.addTickListener(monster)
