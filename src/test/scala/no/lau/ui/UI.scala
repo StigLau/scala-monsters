@@ -4,29 +4,23 @@ import java.awt.Font
 import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
 import no.lau.movement._
-import no.lau.predefined.{LevelEasyC, LevelEasyB, Config}
+import no.lau.predefined.{LevelEasyE, LevelEasyC, LevelEasyB, Config}
 
 /**
- * @author: beiske
+ * @author: beiske                     
  * @author: StigLau
  */
 
 object UI extends SimpleGUIApplication {
-  val config:Config = new LevelEasyC() {
-    val game = Game(40, 25)
-    val player = new Monster(game, "MonsterGunnar") with Player with StackableMovement with Mortal with Pusher
-  }
-  val directionHub = new AsymmetricGamingImpl(config.player)
-  val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
-  config.gameConfig(clock)
-  directionHub.start
-  clock.start
-
    def top = new MainFrame {
      contents = new BorderPanel {
        add(gameBoard, BorderPanel.Position.Center)
      }
    }
+
+  val config = startGame
+  val directionHub = new AsymmetricGamingImpl(config.player)
+  directionHub.start
 
   val gameBoard = new TextArea() {
     editable = false
@@ -37,6 +31,17 @@ object UI extends SimpleGUIApplication {
   }
 
   def printGameBoardCallback(): Unit = {gameBoard.text = config.game.printableBoard}
+
+  def startGame() = {
+    val config: Config = new LevelEasyE() {
+      val game = Game(38, 21)
+      val player = new Monster(game, "MonsterGunnar") with Player with StackableMovement with Mortal with Pusher
+    }
+    val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
+    config.gameConfig(clock)
+    clock.start
+    config
+  }
 }
 
 object KeyStrokeHandler {

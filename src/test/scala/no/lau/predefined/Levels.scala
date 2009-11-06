@@ -28,12 +28,16 @@ abstract class LevelEasyC extends Config {
   val level = Levels(true, false, false, 0 to 0, 0,	0, 3)
 }
 
+abstract class LevelEasyE extends Config {
+  val level = Levels(true, true, false, 0 to 0, 0,	0, 4)
+}
+
 trait Config{
   val player:Monster with StackableMovement
   val game:Game
   val level:Levels
   def gameConfig(clock:Clock) = {
-    1 to 250 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
+    1 to 270 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
     1 to level.startingBeasts foreach { arg =>
               val monster = new RammingMonster(game, "monster " + arg) {
                 override def kill { clock.removeTickListener(this) }
