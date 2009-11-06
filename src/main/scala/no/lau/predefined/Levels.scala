@@ -1,7 +1,8 @@
 package no.lau.predefined
 
-import no.lau.movement.StackableMovement
 import no.lau.domain._
+import no.lau.movement.{Clock, StackableMovement}
+import no.lau.monsters.RammingMonster
 
 /**
  * Settings of each level according to the original Beasts Game
@@ -32,6 +33,27 @@ object LevelEasyC {
     override def toString = ""
   }
 }
+
+trait Config{
+  val player:Monster with StackableMovement
+  val game:Game
+  def gameConfig(clock:Clock) = {
+    1 to 10 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
+    1 to 10 foreach { arg =>
+              val monster = new RammingMonster(game, "monster " + arg) {
+                override def kill() {
+                  super.kill()
+                  clock.removeTickListener(this)
+                }
+              }
+              game.addRandomly(monster)
+              clock.addTickListener(monster)
+    }
+    game.addRandomly(player)
+  }
+
+}
+
 
 /*
 class TestLevels {

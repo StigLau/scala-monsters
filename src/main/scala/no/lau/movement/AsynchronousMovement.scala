@@ -3,7 +3,13 @@ import actors.Actor
 import actors.Actor._
 import no.lau.domain.Game
 
-class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Actor {
+abstract class Clock extends Actor {
+  var tickListeners:List[TickListener] = List()
+  def addTickListener(newListener:TickListener) { tickListeners = newListener :: tickListeners }
+  def removeTickListener(toBeRemoved:TickListener) { tickListeners -= toBeRemoved }
+}
+
+class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Clock {
   def act() {
     loop {
       reactWithin(time) {
@@ -18,9 +24,7 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
     }
   }
 
-  var tickListeners:List[TickListener] = List()
-  def addTickListener(newListener:TickListener) { tickListeners = newListener :: tickListeners }
-  def removeTickListener(toBeRemoved:TickListener) { tickListeners -= toBeRemoved }
+
 }
 
 trait AsymmetricGamingInterface extends Actor

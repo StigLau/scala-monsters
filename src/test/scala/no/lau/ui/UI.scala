@@ -3,9 +3,8 @@ package no.lau.domain
 import java.awt.Font
 import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
-import no.lau.monsters.RammingMonster
 import no.lau.movement._
-import no.lau.predefined.{LevelEasyC}
+import no.lau.predefined.{Config, LevelEasyC}
 
 /**
  * @author: beiske
@@ -13,9 +12,17 @@ import no.lau.predefined.{LevelEasyC}
  */
 
 object UI extends SimpleGUIApplication {
-  var game =  GameConfiguration.gameConfig(printGameBoardCallback)
-  //var game =  LevelEasyC.gameConfig(printGameBoardCallback)
-  var directionHub = GameConfiguration.directionHub
+  val config:Config = new Config() {
+    val game = Game(40, 25)
+    val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
+      override def toString = ""
+    }
+  }
+  val directionHub = new AsymmetricGamingImpl(config.game, config.player)
+  val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
+  config.gameConfig(clock)
+  directionHub.start
+  clock.start
 
    def top = new MainFrame {
      contents = new BorderPanel {
@@ -31,7 +38,7 @@ object UI extends SimpleGUIApplication {
     peer.setFont(new Font("Monospaced", peer.getFont().getStyle(), 24));
   }
 
-  def printGameBoardCallback(): Unit = {gameBoard.text = game printableBoard}
+  def printGameBoardCallback(): Unit = {gameBoard.text = config.game.printableBoard}
 }
 
 object KeyStrokeHandler {
@@ -50,34 +57,6 @@ object KeyStrokeHandler {
   }
 }
 
-object GameConfiguration {
-  val game = Game(40, 25)
-  val player = new Monster(game, "MonsterGunnar") with StackableMovement with Mortal with Pusher {
-    override def toString = ""
-  }
-  val directionHub = new AsymmetricGamingImpl(game, player)
-
-  def gameConfig(callback: () => Unit) = {
-    val clock = new VerySimpleClock(game, 200, callback)
-
-    1 to 10 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
-    1 to 10 foreach { arg =>
-              val monster = new RammingMonster(game, "monster " + arg) {
-                override def kill() {
-                  super.kill()
-                  clock.removeTickListener(this)
-                }
-              }
-              game.addRandomly(monster)
-              clock.addTickListener(monster)
-    }
-    game.addRandomly(player)
-
-    directionHub.start
-    clock.start
-    game
-  }
-}
 
 object GUIStarter {
   def main(args: Array[String]) = UI.main(null)
