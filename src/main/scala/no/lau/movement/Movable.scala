@@ -4,7 +4,7 @@ import no.lau.domain._
 
 trait StackableMovement extends Movable {
   var movementStack:List[Direction] = List()
-  def stackMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
+  def queueMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
   def progressionHalted { /* println("Further progression halted") */} //todo implement what clients should do when progression halts
 }
 
@@ -62,4 +62,5 @@ case object Up extends Direction(0, 1)
 case object Down extends Direction(0, -1)
 case object Right extends Direction(1, 0)
 case object Left extends Direction(-1, 0)
+case object Wait extends Direction(0, 0)
 
