@@ -19,14 +19,14 @@ trait Game {
  * BoardSize X and Y start from 0 to make computation easier to write :)
  */
 class GameImpl(val boardSizeX: Int, val boardSizeY: Int) extends AbstractGame {
-  createBoarder()
+  createBoarder
 }
 
 abstract class AbstractGame extends Game {
-  var gameBoards:List[HashMap[Location, GamePiece]] = List(new HashMap[Location, GamePiece])
+  var gameBoards = List(new HashMap[Location, GamePiece])
 
-  def currentGameBoard():HashMap[Location, GamePiece] = gameBoards.first
-  def previousGameBoard():HashMap[Location, GamePiece] = {
+  def currentGameBoard = gameBoards.first
+  def previousGameBoard = {
     if(gameBoards.tail.size > 0)
       gameBoards.tail.first
     else
@@ -68,7 +68,7 @@ abstract class AbstractGame extends Game {
   /**
    * Simple algorithm for selecting free tiles on a board
    */
-  def findRandomFreeCell(): Location = {
+  def findRandomFreeCell = {
     val freeCells = for {
       i <- 0 to boardSizeX
       j <- 0 to boardSizeY
@@ -80,7 +80,7 @@ abstract class AbstractGame extends Game {
 
   def addRandomly(gamePiece: GamePiece) { currentGameBoard += findRandomFreeCell -> gamePiece }
 
-  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]): Option[Location] = {
+  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]) = {
     val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
     if(foundItAt != -1)
       Some(gameBoard.keySet.toArray(foundItAt))
@@ -97,7 +97,7 @@ abstract class AbstractGame extends Game {
     table.foldLeft("")(_ + _)
   }
 
-  def createBoarder() {
+  def createBoarder {
     for(x <- 0 to boardSizeX; y <- 1 to boardSizeY -1) {
       currentGameBoard += Location(x, 0) -> new StaticWall()
       currentGameBoard += Location(x, boardSizeY) -> new StaticWall()
