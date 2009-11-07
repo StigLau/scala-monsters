@@ -6,7 +6,7 @@ import org.junit.Test
 import no.lau.monsters.RammingMonster
 
 class CascadingMovementTest {
-  val game = new Game(3, 2) {
+  val game = new GameImpl(3, 2) {
     currentGameBoard += Location(1, 1) -> new Block(this)
     currentGameBoard += Location(2, 1) -> new Block(this)
     currentGameBoard += Location(2, 0) -> new StaticWall()
@@ -69,7 +69,7 @@ class CascadingMovementTest {
 
 class SqueezingTest {
   @Test def squeezingMonster() {
-    val game = new Game(4, 0) {
+    val game = new GameImpl(4, 0) {
         currentGameBoard += Location(1, 0) -> new Block(this)
         currentGameBoard += Location(3, 0) -> new Block(this)
         override def createBoarder() {/* Do not create border */ }
@@ -91,7 +91,7 @@ class SqueezingTest {
   }
 
   @Test def squeezingMonsterAgainstThinAirFails() {
-    val game = new Game(4, 0) {
+    val game = new GameImpl(4, 0) {
       currentGameBoard += Location(1, 0) -> new Block(this)
       currentGameBoard += Location(4, 0) -> new Block(this)
       override def createBoarder() {/* Do not create border */ }
@@ -109,7 +109,7 @@ class SqueezingTest {
 
 class ClockedMovementTest {
   @Test def asyncronousMovementStacksUpMovementAndWaitsForTicks() {
-    val game = new Game(3, 0)
+    val game = new GameImpl(3, 0)
     val currentGameBoard = game.currentGameBoard
 
     val leif = new Monster(game) with QueuedMovement {currentGameBoard += Location(0, 0) -> this}
@@ -132,7 +132,7 @@ class ClockedMovementTest {
 
   @Test
   def stackableMovement() {
-    val game = new Game(1, 1)
+    val game = new GameImpl(1, 1)
     val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += Location(0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
@@ -146,7 +146,7 @@ class ClockedMovementTest {
 
   @Test
   def RamTest {
-    val game = new Game(3, 3) {
+    val game = new GameImpl(3, 3) {
       override def createBoarder() {/* Do not create border */ }
     }
 

@@ -4,13 +4,25 @@ import collection.mutable.HashMap
 import scala.util.Random
 import no.lau.movement.{Location, QueuedMovement, Movable}
 
-/**
- * BoardSize X and Y start from 0 to make computation easier to write :)
- */
-trait GameTrait {
+trait Game {
   val boardSizeX: Int
   val boardSizeY: Int
 
+  def currentGameBoard:HashMap[Location, GamePiece]
+  def previousGameBoard:HashMap[Location, GamePiece]
+  def newTurn:HashMap[Location, GamePiece]
+  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]): Option[Location]
+  def addRandomly(gamePiece: GamePiece)
+  def printableBoard:String
+}
+/**
+ * BoardSize X and Y start from 0 to make computation easier to write :)
+ */
+class GameImpl(val boardSizeX: Int, val boardSizeY: Int) extends AbstractGame {
+  createBoarder()
+}
+
+abstract class AbstractGame extends Game {
   var gameBoards:List[HashMap[Location, GamePiece]] = List(new HashMap[Location, GamePiece])
 
   def currentGameBoard():HashMap[Location, GamePiece] = gameBoards.first
@@ -66,7 +78,7 @@ trait GameTrait {
     freeCells(new Random().nextInt(freeCells.length))
   }
 
-  def addRandomly(gamePiece: GamePiece) = currentGameBoard += findRandomFreeCell -> gamePiece
+  def addRandomly(gamePiece: GamePiece) { currentGameBoard += findRandomFreeCell -> gamePiece }
 
   def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]): Option[Location] = {
     val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
@@ -93,27 +105,4 @@ trait GameTrait {
       currentGameBoard += Location(boardSizeX, y) -> new StaticWall()
     }
   }
-}
-class Game(val boardSizeX: Int, val boardSizeY: Int) extends GameTrait {
-  createBoarder()
-}
-/** Marker - GamePiece of the Game Board */
-trait GamePiece
-/** Marker - GamePiece can be killed */
-trait Mortal { def kill {println(this + " was killed!")} }
-/** Marker - Monster kan kill by eating */
-trait Meelee
-/** Marker - Able to push stuff */
-trait Pusher
-/** Marker - a playable character */
-trait Player { override def toString = "∆" }
-/** The generic NPC or playable charachter */
-class Monster(val game: Game) extends GamePiece{ override def toString = "H" }
-/** Block can be pushed */
-class Block(val game: Game) extends Movable {override def toString = "B"}
-/** Can not be pushed  */
-class StaticWall() extends GamePiece {override def toString = "W"}
-/** Main exception for instructing that movement was illegal */ 
-case class IllegalMoveException(val message: String) extends Throwable {
-  override def getMessage = message
 }
