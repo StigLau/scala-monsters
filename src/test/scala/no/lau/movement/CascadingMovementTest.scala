@@ -7,14 +7,14 @@ import no.lau.monsters.RammingMonster
 
 class CascadingMovementTest {
   val game = new Game(3, 2) {
-    currentGameBoard += (1, 1) -> new Block(this)
-    currentGameBoard += (2, 1) -> new Block(this)
-    currentGameBoard += (2, 0) -> new StaticWall()
+    currentGameBoard += Location(1, 1) -> new Block(this)
+    currentGameBoard += Location(2, 1) -> new Block(this)
+    currentGameBoard += Location(2, 0) -> new StaticWall()
   }
   val currentGameBoard = game.currentGameBoard
 
   @Test def monsterMovingBlocksTest() {
-    val leif = new Monster(game) with Movable with Pusher {game.currentGameBoard += (1, 0) -> this}
+    val leif = new Monster(game) with Movable with Pusher {game.currentGameBoard += Location(1, 0) -> this}
     println(game printableBoard)
     leif move (Up)
     assertEquals (game printableBoard,
@@ -39,10 +39,10 @@ class CascadingMovementTest {
       "..W.\n")
   }
 
-  //@Test moving two blocks is not implemented yet 
+  //@Test moving two blocks is not implemented yet
   def cascadingMovementTest() {
     val leif = new Monster(game) with Movable with Pusher {
-      currentGameBoard += (0, 1) -> this}
+      currentGameBoard += Location(0, 1) -> this}
     leif move (Right)
     assertEquals (game printableBoard,
       "....\n" +
@@ -52,21 +52,21 @@ class CascadingMovementTest {
 
   //@Test moving two blocks is not implemented yet
   def erronousMovementPushTwoBlocksRightOverTheBoarder() {
-    val leif = new Monster(game) with Movable with Pusher {currentGameBoard += (0, 1) -> this}
+    val leif = new Monster(game) with Movable with Pusher {currentGameBoard += Location(0, 1) -> this}
     leif move (Right)
     try {leif move (Right)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def erronousMovementDownOverTheBoarder() {
-    val leif = new Monster(game) with Movable with Pusher {currentGameBoard += (1, 2) -> this}
+    val leif = new Monster(game) with Movable with Pusher {currentGameBoard += Location(1, 2) -> this}
     leif move (Down)
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
 
   @Test def illegalMovementIntoStaticWall() {
-    val leif = new Monster(game) with Movable {currentGameBoard += (2, 2) -> this}
+    val leif = new Monster(game) with Movable {currentGameBoard += Location(2, 2) -> this}
     try {leif move (Down)}
     catch {case ime: IllegalMoveException =>}
   }
@@ -76,17 +76,17 @@ class CascadingMovementTest {
 class SqueezingTest {
   @Test def squeezingMonster() {
     val game = new Game(4, 0) {
-        currentGameBoard += (1, 0) -> new Block(this)
-        currentGameBoard += (3, 0) -> new Block(this)
+        currentGameBoard += Location(1, 0) -> new Block(this)
+        currentGameBoard += Location(3, 0) -> new Block(this)
       }
       val currentGameBoard = game.currentGameBoard
 
     val pusher = new Monster(game) with Movable with Pusher {
-      currentGameBoard += (0, 0) -> this
+      currentGameBoard += Location(0, 0) -> this
       override def toString = "P"
     }
     val victim = new Monster(game) with Movable with Mortal {
-      currentGameBoard += (2, 0) -> this
+      currentGameBoard += Location(2, 0) -> this
       override def toString = "V"
     }
 
@@ -97,13 +97,13 @@ class SqueezingTest {
 
   @Test def squeezingMonsterAgainstThinAirFails() {
     val game = new Game(4, 0) {
-      currentGameBoard += (1, 0) -> new Block(this)
-      currentGameBoard += (4, 0) -> new Block(this)
+      currentGameBoard += Location(1, 0) -> new Block(this)
+      currentGameBoard += Location(4, 0) -> new Block(this)
     }
     val currentGameBoard = game.currentGameBoard
-    
-    val leif = new Monster(game) with Movable {currentGameBoard += (0, 0) -> this}
-    val offer = new Monster(game) with Movable {currentGameBoard += (2, 0) -> this}
+
+    val leif = new Monster(game) with Movable {currentGameBoard += Location(0, 0) -> this}
+    val offer = new Monster(game) with Movable {currentGameBoard += Location(2, 0) -> this}
 
     assertEquals ("HBH.B\n", game printableBoard)
     try {leif move (Right)}
@@ -116,7 +116,7 @@ class ClockedMovementTest {
     val game = new Game(3, 0)
     val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game) with QueuedMovement {currentGameBoard += (0, 0) -> this}
+    val leif = new Monster(game) with QueuedMovement {currentGameBoard += Location(0, 0) -> this}
 
     assertEquals ("H...\n", game printableBoard)
     leif queueMovement (Right)
@@ -137,7 +137,7 @@ class ClockedMovementTest {
   @Test
   def stackableMovement() {
     val game = new Game(1, 1)
-    val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += Location(0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
     monsterGunnar.queueMovement(Right)
@@ -152,7 +152,7 @@ class ClockedMovementTest {
   @Test
   def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression() {
     val game = new Game(0, 0)
-    val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += Location(0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
     monsterGunnar.queueMovement(Right)
@@ -167,11 +167,11 @@ class ClockedMovementTest {
     val game = new Game(3, 3)
 
     val rammstein = new RammingMonster(game) with Meelee {
-      game.currentGameBoard += (3, 3) -> this
+      game.currentGameBoard += Location(3, 3) -> this
       override def toString = "R"
     }
     val victim = new Monster(game) with Player with Mortal {
-      game.currentGameBoard += (0, 0) -> this
+      game.currentGameBoard += Location(0, 0) -> this
       override def toString = "V"
     }
 

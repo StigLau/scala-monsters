@@ -5,17 +5,16 @@ import no.lau.domain._
 trait QueuedMovement extends Movable {
   var movementQueue:List[Direction] = List()
   def queueMovement(dir:Direction) { movementQueue = movementQueue ::: List(dir) }
-  def progressionHalted { /* println("Further progression halted") */} //todo implement what clients should do when progression halts
+  def progressionHalted { /* println("Further progression halted") */}
 }
 
 trait Movable extends GamePiece {
-  val game: Game //todo game should preferably be referenced some other way
+  val game: Game
 
   /**
    * Used for moving gamepieces around the gameBoard
    * If the route ends up in an illegal move at one stage, the movement will be dropped and an IllegalMovementException will be thrown
    * The route can consist of up to four GamePieces to do checks
-   * todo working with Tuple2[x, y] is not as it should be. Should be working with the objects, and some places ask where they are located.
    **/
   def move(inThatDirection: Direction) {
     val firstPlace = game.whereIs(this, game.previousGameBoard).get
@@ -35,27 +34,28 @@ trait Movable extends GamePiece {
     move(firstPlace, secondPlace)
   }
 
-  private def goingTowards(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Tuple2[Int, Int] = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
+  private def goingTowards(oldLocation:Location, inThatDirection:Direction):Location = Location(oldLocation.x + inThatDirection.dir.x, oldLocation.y + inThatDirection.dir.y)
 
-  private def whosInMyWay(newLocation:Tuple2[Int, Int]):Option[GamePiece] = game.previousGameBoard.get(newLocation)
+  private def whosInMyWay(newLocation:Location):Option[GamePiece] = game.previousGameBoard.get(newLocation)
 
-  private def move(oldLocation: Tuple2[Int, Int], newLocation: Tuple2[Int, Int]) {
+  private def move(oldLocation: Location, newLocation: Location) {
     game.currentGameBoard -= oldLocation
     game.currentGameBoard += newLocation -> this
-  }
+  } 
 
   def whereAreYou = game.whereIs(this, game.previousGameBoard)
 }
 
-// Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
+case class Location(x:Int, y:Int)
+
 object Direction extends Enumeration {
   val Up, Down, Right, Left, Wait = Value
 }
 
-sealed abstract class Direction(val dir: Tuple2[Int, Int])
-case object Up extends Direction(0, 1)
-case object Down extends Direction(0, -1)
-case object Right extends Direction(1, 0)
-case object Left extends Direction(-1, 0)
-case object Wait extends Direction(0, 0)
+sealed abstract class Direction(val dir: Location)
+case object Up extends Direction(Location(0, 1))
+case object Down extends Direction(Location(0, -1))
+case object Right extends Direction(Location(1, 0))
+case object Left extends Direction(Location(-1, 0))
+case object Wait extends Direction(Location(0, 0))
 

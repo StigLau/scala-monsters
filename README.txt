@@ -35,6 +35,11 @@ h2. Prioritized todo list:
  * Monster who can push/squish
  * Property of the game how many cascading moves a monster can create
  * Start to create monster AI
+ * Check if the movement collides with other movements, in which case, roll back both movements
+ * should have a set value of number of movables it can push
+ * working with Location is not as it should be. Should be working with the objects, and some places ask where they are located.
+ * Game in Movable should preferably be referenced some other way
+ * implement what clients should do when progression halts
 
 h2. Known bugs
  * Cannot push multiple blocks. Have to implement a pusher "Strength" to indicate the number of available pushes. Although this is not a requirement of Beasts, it could be interesting to implement at a later stage for a different kind of game.

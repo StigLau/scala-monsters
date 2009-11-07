@@ -26,15 +26,15 @@ trait SimpleMonsterAI extends QueuedMovement with TickListener {
     val enemyIsThereOption = game.whereIs(enemy, game.currentGameBoard)
     (iAmHereOption, enemyIsThereOption) match {
       case (Some(iAmHere), Some(enemyIsThere)) => {
-        val xDistance = Math.abs(iAmHere._1 - enemyIsThere._1)
-        val yDistance = Math.abs(iAmHere._2 - enemyIsThere._2)
+        val xDistance = Math.abs(iAmHere.x - enemyIsThere.x)
+        val yDistance = Math.abs(iAmHere.y - enemyIsThere.y)
         if (xDistance > yDistance) {
-          if (iAmHere._1 > enemyIsThere._1)
+          if (iAmHere.x > enemyIsThere.x)
             Some(Left)
           else
             Some(Right)
         } else {
-          if (iAmHere._2 > enemyIsThere._2)
+          if (iAmHere.y > enemyIsThere.y)
             Some(Down)
           else
             Some(Up)
