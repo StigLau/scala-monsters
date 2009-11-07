@@ -119,9 +119,9 @@ class ClockedMovementTest {
     val leif = new Monster(game, "MonsterLeif") with StackableMovement {currentGameBoard += (0, 0) -> this}
 
     assertEquals ("H...\n", game printableBoard)
-    leif stackMovement (Right)
-    leif stackMovement (Right)
-    leif stackMovement (Right)
+    leif queueMovement (Right)
+    leif queueMovement (Right)
+    leif queueMovement (Right)
     assertEquals ("H...\n", game printableBoard)
     game.newTurn
     assertEquals (".H..\n", game printableBoard)
@@ -139,8 +139,8 @@ class ClockedMovementTest {
     val game = new Game(1, 1)
     val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
-    monsterGunnar.stackMovement(Up)
-    monsterGunnar.stackMovement(Right)
+    monsterGunnar.queueMovement(Up)
+    monsterGunnar.queueMovement(Right)
     assertEquals (game printableBoard, "..\nH.\n")
     game.newTurn
     assertEquals (game printableBoard, "H.\n..\n")
@@ -154,8 +154,8 @@ class ClockedMovementTest {
     val game = new Game(0, 0)
     val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
-    monsterGunnar.stackMovement(Up)
-    monsterGunnar.stackMovement(Right)
+    monsterGunnar.queueMovement(Up)
+    monsterGunnar.queueMovement(Right)
     assertEquals(2, monsterGunnar.movementStack.size)
     game.newTurn
     assertEquals(0, monsterGunnar.movementStack.size)
@@ -177,7 +177,7 @@ class ClockedMovementTest {
 
     for ( step <- 0 to 5) {
       println(game.printableBoard)
-      val direction = rammstein.findPathTo(rammstein.enemies.head).get
+      val direction = rammstein.findPathTo(rammstein.prioritizedEnemy).get
       println("Going " + direction)
       rammstein.move(direction)
     }

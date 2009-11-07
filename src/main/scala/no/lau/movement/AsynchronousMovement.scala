@@ -33,7 +33,7 @@ class AsymmetricGamingImpl(mover: StackableMovement) extends AsymmetricGamingInt
   def act() {
     loop {
       react {
-        case direction: Direction => mover.stackMovement(direction)
+        case direction: Direction => mover.queueMovement(direction)
         case _ => println("No direction")
       }
     }
