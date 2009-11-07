@@ -177,7 +177,7 @@ class ClockedMovementTest {
 
     for ( step <- 0 to 5) {
       println(game.printableBoard)
-      val direction = rammstein.findPathTo(rammstein.prioritizedEnemy).get
+      val direction = rammstein.findPathTo(rammstein.prioritizedEnemy.get).get
       println("Going " + direction)
       rammstein.move(direction)
     }
