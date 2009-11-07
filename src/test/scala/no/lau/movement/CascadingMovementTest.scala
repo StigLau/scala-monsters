@@ -142,7 +142,6 @@ class ClockedMovementTest {
     assertEquals (game printableBoard, "H.\n..\n")
     game.newTurn
     assertEquals (game printableBoard, ".H\n..\n")
-    ""
   }
 
   @Test
