@@ -1,7 +1,7 @@
 package no.lau.predefined
 
 import no.lau.domain._
-import no.lau.movement.{Clock, StackableMovement}
+import no.lau.movement.{Clock, QueuedMovement}
 import no.lau.monsters.RammingMonster
 
 /**
@@ -33,7 +33,7 @@ abstract class LevelEasyE extends Config {
 }
 
 trait Config{
-  val player:Monster with StackableMovement
+  val player:Monster with QueuedMovement
   val game:Game
   val level:Levels
   def gameConfig(clock:Clock) = {

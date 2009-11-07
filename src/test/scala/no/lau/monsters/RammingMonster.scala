@@ -6,7 +6,7 @@ import no.lau.domain._
 /**
  * This code is an ugly hack for getting a first version up and running :)
  */
-trait SimpleMonsterAI extends StackableMovement with TickListener {
+trait SimpleMonsterAI extends QueuedMovement with TickListener {
   override def tick {
     if(prioritizedEnemy != None)
       findPathTo(prioritizedEnemy.get) match {

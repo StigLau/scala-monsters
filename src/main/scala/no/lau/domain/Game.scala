@@ -1,7 +1,7 @@
 package no.lau.domain
 
 import collection.mutable.HashMap
-import no.lau.movement.{StackableMovement, Movable}
+import no.lau.movement.{QueuedMovement, Movable}
 
 /**
  * BoardSize X and Y start from 0 to make computation easier to write :)
@@ -23,19 +23,19 @@ case class Game(boardSizeX: Int, boardSizeY: Int) {
     gameBoards = cloneCurrent :: gameBoards
     for(gamePiece <- previousGameBoard.values) {
       (gamePiece, gamePiece) match {
-        case (stackable: StackableMovement, movable: Movable) => {
+        case (stackable: QueuedMovement, movable: Movable) => {
 
-          if (stackable.movementStack.size > 0) println(stackable.movementStack)
+          if (stackable.movementQueue.size > 0) println(stackable.movementQueue)
 
-          stackable.movementStack.firstOption match {
+          stackable.movementQueue.firstOption match {
             case Some(direction) => {
               try {
                 movable.move(direction)
-                stackable.movementStack = stackable.movementStack.tail
+                stackable.movementQueue = stackable.movementQueue.tail
               } catch {
                 case ime: IllegalMoveException => {
                   //println("Illegal Move for " + movable + ": " + ime.getMessage)
-                  stackable.movementStack = List()
+                  stackable.movementQueue = List()
                   stackable.progressionHalted
                 }
               }

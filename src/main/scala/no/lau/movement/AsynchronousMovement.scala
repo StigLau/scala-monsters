@@ -29,7 +29,7 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
 
 trait AsymmetricGamingInterface extends Actor
 
-class AsymmetricGamingImpl(mover: StackableMovement) extends AsymmetricGamingInterface {
+class AsymmetricGamingImpl(mover: QueuedMovement) extends AsymmetricGamingInterface {
   def act() {
     loop {
       react {

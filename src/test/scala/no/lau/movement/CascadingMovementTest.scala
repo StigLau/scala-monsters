@@ -116,7 +116,7 @@ class ClockedMovementTest {
     val game = new Game(3, 0)
     val currentGameBoard = game.currentGameBoard
 
-    val leif = new Monster(game, "MonsterLeif") with StackableMovement {currentGameBoard += (0, 0) -> this}
+    val leif = new Monster(game, "MonsterLeif") with QueuedMovement {currentGameBoard += (0, 0) -> this}
 
     assertEquals ("H...\n", game printableBoard)
     leif queueMovement (Right)
@@ -137,7 +137,7 @@ class ClockedMovementTest {
   @Test
   def stackableMovement() {
     val game = new Game(1, 1)
-    val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game, "MonsterLeif") with QueuedMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
     monsterGunnar.queueMovement(Right)
@@ -152,13 +152,13 @@ class ClockedMovementTest {
   @Test
   def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression() {
     val game = new Game(0, 0)
-    val monsterGunnar = new Monster(game, "MonsterLeif") with StackableMovement {game.currentGameBoard += (0, 0) -> this}
+    val monsterGunnar = new Monster(game, "MonsterLeif") with QueuedMovement {game.currentGameBoard += (0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
     monsterGunnar.queueMovement(Right)
-    assertEquals(2, monsterGunnar.movementStack.size)
+    assertEquals(2, monsterGunnar.movementQueue.size)
     game.newTurn
-    assertEquals(0, monsterGunnar.movementStack.size)
+    assertEquals(0, monsterGunnar.movementQueue.size)
     ""
   }
 

@@ -2,9 +2,9 @@ package no.lau.movement
 
 import no.lau.domain._
 
-trait StackableMovement extends Movable {
-  var movementStack:List[Direction] = List()
-  def queueMovement(dir:Direction) { movementStack = movementStack ::: List(dir) }
+trait QueuedMovement extends Movable {
+  var movementQueue:List[Direction] = List()
+  def queueMovement(dir:Direction) { movementQueue = movementQueue ::: List(dir) }
   def progressionHalted { /* println("Further progression halted") */} //todo implement what clients should do when progression halts
 }
 
