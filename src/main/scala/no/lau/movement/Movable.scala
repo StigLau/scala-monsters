@@ -24,9 +24,6 @@ trait Movable extends GamePiece {
     val fourthPlace = goingTowards(thirdPlace, inThatDirection)
     val movement = (this, whosInMyWay(secondPlace), whosInMyWay(thirdPlace), whosInMyWay(fourthPlace))
 
-    if (isOverBorder(secondPlace))
-      throw IllegalMoveException("Move caused movable to travel across the border")
-
     movement match {
       case (pusher:Pusher, Some(movable:Movable), Some(victim:Mortal), Some(gp:GamePiece)) => victim.kill; game.currentGameBoard -= thirdPlace; movable.move(secondPlace, thirdPlace) //Squishing
       case (offender:Meelee, Some(victim:Mortal), _, _) => println("We have a " + offender + " attacking a " + victim); victim.kill
@@ -41,8 +38,6 @@ trait Movable extends GamePiece {
   private def goingTowards(oldLocation:Tuple2[Int, Int], inThatDirection:Direction):Tuple2[Int, Int] = (oldLocation._1 + inThatDirection.dir._1, oldLocation._2 + inThatDirection.dir._2)
 
   private def whosInMyWay(newLocation:Tuple2[Int, Int]):Option[GamePiece] = game.previousGameBoard.get(newLocation)
-
-  private def isOverBorder(newLocation: Tuple2[Int, Int]) = newLocation._1 > game.boardSizeX || newLocation._1 < 0 || newLocation._2 > game.boardSizeY || newLocation._2 < 0
 
   private def move(oldLocation: Tuple2[Int, Int], newLocation: Tuple2[Int, Int]) {
     game.currentGameBoard -= oldLocation

@@ -34,7 +34,7 @@ object UI extends SimpleGUIApplication {
 
   def startGame() = {
     val config: Config = new LevelEasyE() {
-      val game = Game(38, 21)
+      val game = new Game(40, 23)
       val player = new Monster(game, "MonsterGunnar") with Player with QueuedMovement with Mortal with Pusher
     }
     val clock = new VerySimpleClock(config.game, 200, printGameBoardCallback)
