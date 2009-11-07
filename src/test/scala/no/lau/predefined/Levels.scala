@@ -37,10 +37,10 @@ trait Config{
   val game:Game
   val level:Levels
   def gameConfig(clock:Clock) = {
-    1 to 270 foreach {arg => game.addRandomly(Block(game, "block " + arg))}
-    1 to 10 foreach {arg => game.addRandomly(StaticWall())}
+    1 to 270 foreach {arg => game.addRandomly(new Block(game))}
+    1 to 10 foreach {arg => game.addRandomly(new StaticWall())}
     1 to level.startingBeasts foreach { arg =>
-              val monster = new RammingMonster(game, "monster " + arg) {
+              val monster = new RammingMonster(game) {
                 override def kill { clock.removeTickListener(this) }
               }
               game.addRandomly(monster)
