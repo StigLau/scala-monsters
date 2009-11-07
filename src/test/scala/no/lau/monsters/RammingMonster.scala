@@ -46,7 +46,5 @@ trait SimpleMonsterAI extends StackableMovement with TickListener {
   }
 }
 
-class RammingMonster(game: Game, id: Any) extends Monster(game, id) with SimpleMonsterAI with Meelee with Mortal {
-
-}
+class RammingMonster(game: Game, id: Any) extends Monster(game, id) with SimpleMonsterAI with Meelee with Mortal 
 

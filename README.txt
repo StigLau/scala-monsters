@@ -34,6 +34,7 @@ h2. Prioritized todo list:
  * Capture the flag or similar
  * Monster who can push/squish
  * Property of the game how many cascading moves a monster can create
+ * Start to create monster AI
 
 h2. Known bugs
  * Cannot push multiple blocks. Have to implement a pusher "Strength" to indicate the number of available pushes. Although this is not a requirement of Beasts, it could be interesting to implement at a later stage for a different kind of game.
