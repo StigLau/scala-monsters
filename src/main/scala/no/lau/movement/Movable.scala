@@ -54,7 +54,7 @@ trait Movable extends GamePiece {
 
 // Direction enum should preferably also provide a matrix to indicate that Up is (+1, +0), which could mean that Move didn't have to include the pattern matching.
 object Direction extends Enumeration {
-  val Up, Down, Right, Left = Value
+  val Up, Down, Right, Left, Wait = Value
 }
 
 sealed abstract class Direction(val dir: Tuple2[Int, Int])
