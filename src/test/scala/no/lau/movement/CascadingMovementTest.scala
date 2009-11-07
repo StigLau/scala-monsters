@@ -10,6 +10,7 @@ class CascadingMovementTest {
     currentGameBoard += Location(1, 1) -> new Block(this)
     currentGameBoard += Location(2, 1) -> new Block(this)
     currentGameBoard += Location(2, 0) -> new StaticWall()
+    override def createBoarder() {/* Do not create border */ }
   }
   val currentGameBoard = game.currentGameBoard
 
@@ -58,13 +59,6 @@ class CascadingMovementTest {
     catch {case ime: IllegalMoveException =>}
   }
 
-  @Test def erronousMovementDownOverTheBoarder() {
-    val leif = new Monster(game) with Movable with Pusher {currentGameBoard += Location(1, 2) -> this}
-    leif move (Down)
-    try {leif move (Down)}
-    catch {case ime: IllegalMoveException =>}
-  }
-
   @Test def illegalMovementIntoStaticWall() {
     val leif = new Monster(game) with Movable {currentGameBoard += Location(2, 2) -> this}
     try {leif move (Down)}
@@ -78,6 +72,7 @@ class SqueezingTest {
     val game = new Game(4, 0) {
         currentGameBoard += Location(1, 0) -> new Block(this)
         currentGameBoard += Location(3, 0) -> new Block(this)
+        override def createBoarder() {/* Do not create border */ }
       }
       val currentGameBoard = game.currentGameBoard
 
@@ -99,6 +94,7 @@ class SqueezingTest {
     val game = new Game(4, 0) {
       currentGameBoard += Location(1, 0) -> new Block(this)
       currentGameBoard += Location(4, 0) -> new Block(this)
+      override def createBoarder() {/* Do not create border */ }
     }
     val currentGameBoard = game.currentGameBoard
 
@@ -150,21 +146,10 @@ class ClockedMovementTest {
   }
 
   @Test
-  def crossingOverBoarderOrIllegalMovementHaltsFurtherProgression() {
-    val game = new Game(0, 0)
-    val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += Location(0, 0) -> this}
-    game.printableBoard
-    monsterGunnar.queueMovement(Up)
-    monsterGunnar.queueMovement(Right)
-    assertEquals(2, monsterGunnar.movementQueue.size)
-    game.newTurn
-    assertEquals(0, monsterGunnar.movementQueue.size)
-    ""
-  }
-
-  @Test
   def RamTest {
-    val game = new Game(3, 3)
+    val game = new Game(3, 3) {
+      override def createBoarder() {/* Do not create border */ }
+    }
 
     val rammstein = new RammingMonster(game) with Meelee {
       game.currentGameBoard += Location(3, 3) -> this
