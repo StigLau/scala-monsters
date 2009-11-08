@@ -3,7 +3,6 @@ package no.lau.movement
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test
-import no.lau.monsters.RammingMonster
 
 class CascadingMovementTest {
   val game = new GameImpl(3, 2) {
@@ -108,8 +107,9 @@ class SqueezingTest {
 }
 
 class ClockedMovementTest {
-  @Test def asyncronousMovementStacksUpMovementAndWaitsForTicks() {
-    val game = new GameImpl(3, 0)
+  @Test
+   def asyncronousMovementStacksUpMovementAndWaitsForTicks() {
+    val game = new GameImpl(3, 0) { override def createBoarder() {/* Do not create border */ } }
     val currentGameBoard = game.currentGameBoard
 
     val leif = new Monster(game) with QueuedMovement {currentGameBoard += Location(0, 0) -> this}
@@ -129,10 +129,9 @@ class ClockedMovementTest {
     game.newTurn
     assertEquals ("...H\n", game printableBoard)
   }
-
   @Test
   def stackableMovement() {
-    val game = new GameImpl(1, 1)
+    val game = new GameImpl(1, 1) { override def createBoarder() {/* Do not create border */ } }
     val monsterGunnar = new Monster(game) with QueuedMovement {game.currentGameBoard += Location(0, 0) -> this}
     game.printableBoard
     monsterGunnar.queueMovement(Up)
@@ -144,26 +143,4 @@ class ClockedMovementTest {
     assertEquals (game printableBoard, ".H\n..\n")
   }
 
-  @Test
-  def RamTest {
-    val game = new GameImpl(3, 3) {
-      override def createBoarder() {/* Do not create border */ }
-    }
-
-    val rammstein = new RammingMonster(game) with Meelee {
-      game.currentGameBoard += Location(3, 3) -> this
-      override def toString = "R"
-    }
-    val victim = new Monster(game) with Player with Mortal {
-      game.currentGameBoard += Location(0, 0) -> this
-      override def toString = "V"
-    }
-
-    for ( step <- 0 to 5) {
-      println(game.printableBoard)
-      val direction = rammstein.findPathTo(rammstein.prioritizedEnemy.get).get
-      println("Going " + direction)
-      rammstein.move(direction)
-    }
-  }
 }
