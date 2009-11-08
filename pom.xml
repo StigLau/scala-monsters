@@ -12,9 +12,22 @@
     <name>Scala Monster - The Game - Root</name>
     <description>Squeeze them monsters</description>
 
+    <organization>
+        <name>Lau.no</name>
+        <url>http://stig.lau.no</url>
+    </organization>
+    <developers>
+        <developer>
+            <name>Stig Lau</name>
+            <email>stig@lau.no</email>
+        </developer>
+    </developers>
+
+
     <modules>
         <module>core</module>
         <module>simple-gui</module>
+        <module>webstart-distribution</module>
     </modules>
 
     <properties>

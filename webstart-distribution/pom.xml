@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>no.lau.games.scala-monster</groupId>
+        <artifactId>root</artifactId>
+        <version>0.2</version>
+    </parent>
+
+    <artifactId>webstart-distribution</artifactId>
+    <packaging>jar</packaging>
+    <name>Scala Monster - The game - Webstart Distribution</name>
+
+    <url>http://10.0.0.39:8080</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>no.lau.games.scala-monster</groupId>
+            <artifactId>simple-gui</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo.webstart</groupId>
+                <artifactId>webstart-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>jnlp</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jnlp>
+                        <mainClass>no.lau.domain.UI</mainClass>
+                    </jnlp>
+                    <outputJarVersions>false</outputJarVersions>
+                    <pack200>false</pack200>
+                    <gzip>false</gzip>
+                    <verbose>false</verbose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

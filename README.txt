@@ -13,7 +13,9 @@ h1. Requirements
 Scala Monsters requires Java and Maven 2 installed
 
 == Running the game ==
-From a command line;  
+From a command line;
+
+cd scala-monsters/simple-gui
 mvn scala:run -DmainClass=no.lau.domain.UI
 
 
@@ -27,6 +29,7 @@ http://twistedmatrix.com/users/acapnotic/wares/code/beasts/
 
 
 h2. Prioritized todo list:
+ * Distribute WebStart app with Google App Engine
  * Edit interface of Mortal in some way - if you have tickListener and are killable, the ticklistener should be removed, and you should yourself be removed from the board. Today, your ghost can still be hanging around on the board.
  * Handle crashes - IE multiple monsters wishing to move to the same space in time
  * implement exploding static walls
