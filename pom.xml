@@ -28,6 +28,7 @@
         <module>core</module>
         <module>simple-gui</module>
         <module>webstart-distribution</module>
+        <module>gae-distribution</module>
     </modules>
 
     <properties>
