@@ -17,7 +17,7 @@ class Monster(val game: Game) extends GamePiece{ override def toString = "H" }
 /** Block can be pushed */
 class Block(val game: Game) extends Movable {override def toString = "B"}
 /** Can not be pushed  */
-class StaticWall() extends GamePiece {override def toString = "W"}
+class StaticWall extends GamePiece {override def toString = "W"}
 /** Main exception for instructing that movement was illegal */
 case class IllegalMoveException(val message: String) extends Throwable {
   override def getMessage = message

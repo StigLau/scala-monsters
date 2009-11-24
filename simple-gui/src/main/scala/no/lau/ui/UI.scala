@@ -1,10 +1,10 @@
 package no.lau.domain
 
-import java.awt.Font
 import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
 import no.lau.movement._
 import no.lau.predefined.{LevelEasyE, LevelEasyC, LevelEasyB, Config}
+import java.awt.{Dimension, Font}
 
 /**
  * @author: beiske                     
@@ -13,6 +13,7 @@ import no.lau.predefined.{LevelEasyE, LevelEasyC, LevelEasyB, Config}
 
 object UI extends SimpleGUIApplication {
    def top = new MainFrame {
+     size = new Dimension(400, 300)
      contents = new BorderPanel {
        add(gameBoard, BorderPanel.Position.Center)
      }

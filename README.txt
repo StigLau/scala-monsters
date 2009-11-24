@@ -1,3 +1,6 @@
+h1. News: Scala-Monsters demo available from Google App Engine
+Go to http://scala-monsters.appspot.com/jnlp/launch.jnlp to test a running implementation
+
 h1. Intro
 Scala Monsters is a based on an old PC game, Beast, but does not intend to recreate all its functionality
 

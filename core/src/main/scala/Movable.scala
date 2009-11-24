@@ -48,10 +48,6 @@ trait Movable extends GamePiece {
 
 case class Location(x:Int, y:Int)
 
-object Direction extends Enumeration {
-  val Up, Down, Right, Left, Wait = Value
-}
-
 sealed abstract class Direction(val dir: Location)
 case object Up extends Direction(Location(0, 1))
 case object Down extends Direction(Location(0, -1))
