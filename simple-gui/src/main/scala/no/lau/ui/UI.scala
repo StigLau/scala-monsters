@@ -11,7 +11,7 @@ import java.awt.{Dimension, Font}
  * @author: StigLau
  */
 
-object UI extends SimpleGUIApplication {
+object UI extends SimpleSwingApplication {
    def top = new MainFrame {
      size = new Dimension(400, 300)
      contents = new BorderPanel {
@@ -59,9 +59,4 @@ object KeyStrokeHandler {
     actionMap.put("left", Action("KeyPressed") {gamingInterface ! Left}.peer)
     actionMap.put("right", Action("KeyPressed") {gamingInterface ! Right}.peer)
   }
-}
-
-
-object GUIStarter {
-  def main(args: Array[String]) = UI.main(null)
 }
