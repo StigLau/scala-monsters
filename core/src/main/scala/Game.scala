@@ -80,10 +80,10 @@ abstract class AbstractGame extends Game {
 
   def addRandomly(gamePiece: GamePiece) { currentGameBoard += findRandomFreeCell -> gamePiece }
 
-  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]) = {
-    val foundItAt: Int = gameBoard.values.indexOf(gamePiece)
+  def whereIs(gamePiece: GamePiece, gameBoard:HashMap[Location, GamePiece]):Option[Location] = {
+    val foundItAt: Int = gameBoard.values.iterator.indexOf(gamePiece)
     if(foundItAt != -1)
-      Some(gameBoard.keySet.toArray(foundItAt))
+      Some(gameBoard.keySet.toArray.apply(foundItAt))
     else
       None
   }
