@@ -4,6 +4,7 @@
 target
 .DS_Store
 .svn
+lib
 lib_managed
 src_managed
 project/boot/
