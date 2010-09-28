@@ -19,15 +19,15 @@ trait SimpleMonsterAI extends QueuedMovement with TickListener {
 
   def enemies:List[GamePiece] = game.currentGameBoard.values.filter((x: GamePiece) => x.isInstanceOf[Player] && x != this).toList
 
-  def prioritizedEnemy = enemies.firstOption
+  def prioritizedEnemy = enemies.headOption
 
   def findPathTo(enemy: GamePiece): Option[Direction] = {
     val iAmHereOption = game.whereIs(this, game.currentGameBoard)
     val enemyIsThereOption = game.whereIs(enemy, game.currentGameBoard)
     (iAmHereOption, enemyIsThereOption) match {
       case (Some(iAmHere), Some(enemyIsThere)) => {
-        val xDistance = Math.abs(iAmHere.x - enemyIsThere.x)
-        val yDistance = Math.abs(iAmHere.y - enemyIsThere.y)
+        val xDistance = math.abs(iAmHere.x - enemyIsThere.x)
+        val yDistance = math.abs(iAmHere.y - enemyIsThere.y)
         if (xDistance > yDistance) {
           if (iAmHere.x > enemyIsThere.x)
             Some(Left)

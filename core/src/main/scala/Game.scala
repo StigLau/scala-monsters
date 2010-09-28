@@ -25,12 +25,12 @@ class GameImpl(val boardSizeX: Int, val boardSizeY: Int) extends AbstractGame {
 abstract class AbstractGame extends Game {
   var gameBoards = List(new HashMap[Location, GamePiece])
 
-  def currentGameBoard = gameBoards.first
+  def currentGameBoard = gameBoards.head
   def previousGameBoard = {
     if(gameBoards.tail.size > 0)
-      gameBoards.tail.first
+      gameBoards.tail.head
     else
-      gameBoards.first
+      gameBoards.head
   }
 
   def newTurn = {
@@ -41,7 +41,7 @@ abstract class AbstractGame extends Game {
 
           if (stackable.movementQueue.size > 0) println(stackable.movementQueue)
 
-          stackable.movementQueue.firstOption match {
+          stackable.movementQueue.headOption match {
             case Some(direction) => {
               try {
                 movable.move(direction)
