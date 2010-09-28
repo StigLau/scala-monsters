@@ -3,45 +3,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!--
+
     <parent>
         <groupId>no.lau.games.scala-monster</groupId>
         <artifactId>root</artifactId>
         <version>0.2</version>
     </parent>
-    -->
-     <groupId>no.lau.games.scala-monster</groupId>
-    <version>0.2</version>
 
     <artifactId>core</artifactId>
-    <packaging>jar</packaging>
     <name>Scala Monster - The game - Core</name>
 
     <dependencies>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
-            <version>2.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
-            <version>2.8.0</version>
         </dependency>
         <dependency>
             <groupId>org.scala-tools.testing</groupId>
             <artifactId>specs</artifactId>
-            <version>1.5.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.scala-tools.testing</groupId>
             <artifactId>scalatest</artifactId>
-            <version>0.9.5</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
         </dependency>
     </dependencies>
 
