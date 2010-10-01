@@ -5,13 +5,14 @@ import no.lau.movement.Location
 import no.lau.domain._
 
 class RammingMonsterTest {
+
   @Test
   def RamTest {
     val game = new GameImpl(3, 3) {
       override def createBoarder() { /* Do not create border */ }
     }
 
-    val rammstein = new Monster(game) with Meelee {
+    val rammstein = new RammingMonster(game) with Meelee {
       game.currentGameBoard += Location(3, 3) -> this
       override def toString = "R"
     }
