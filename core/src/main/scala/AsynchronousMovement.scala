@@ -1,21 +1,23 @@
 package no.lau.movement
+
 import actors.Actor
-import actors.Actor._
 import no.lau.domain.Game
 
 abstract class Clock extends Actor {
-  var tickListeners:List[TickListener] = List()
-  def addTickListener(newListener:TickListener) { tickListeners = newListener :: tickListeners }
-  def removeTickListener(toBeRemoved:TickListener) { tickListeners -= toBeRemoved }
+  var tickListeners: List[TickListener] = List()
+
+  def addTickListener(newListener: TickListener) {tickListeners = newListener :: tickListeners}
+
+  def removeTickListener(toBeRemoved: TickListener) {tickListeners.filterNot(_ == toBeRemoved)}
 }
 
-class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) extends Clock {
+class VerySimpleClock(game: Game, time: Long, renderingCallBack: () => Unit) extends Clock {
   def act() {
     loop {
       reactWithin(time) {
         case _ => {
           game.newTurn
-          for(tl <- tickListeners) {
+          for (tl <- tickListeners) {
             tl.tick
           }
           renderingCallBack()
@@ -23,8 +25,6 @@ class VerySimpleClock(game:Game, time:Long, renderingCallBack: () => Unit) exten
       }
     }
   }
-
-
 }
 
 trait AsymmetricGamingInterface extends Actor
@@ -41,5 +41,5 @@ class AsymmetricGamingImpl(mover: QueuedMovement) extends AsymmetricGamingInterf
 }
 
 trait TickListener {
-  def tick { println("Need to implement tick")}
+  def tick {println("Need to implement tick")}
 }

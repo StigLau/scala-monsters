@@ -3,8 +3,12 @@ package no.lau.movement
 import no.lau.domain._
 import org.junit.Assert._
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
+@RunWith(classOf[JUnit4])
 class CascadingMovementTest {
+
   val game = new GameImpl(3, 2) {
     currentGameBoard += Location(1, 1) -> new Block(this)
     currentGameBoard += Location(2, 1) -> new Block(this)
@@ -142,5 +146,4 @@ class ClockedMovementTest {
     game.newTurn
     assertEquals (game printableBoard, ".H\n..\n")
   }
-
 }
