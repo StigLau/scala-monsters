@@ -23,7 +23,7 @@ object UI extends SimpleSwingApplication {
   val directionHub = new AsymmetricGamingImpl(config.player)
   directionHub.start
 
-  val gameBoard = new TextArea() {
+  val gameBoard = new TextArea {
     editable = false
 
     KeyStrokeHandler.populateInputMap(peer.getInputMap(JComponent.WHEN_FOCUSED))
