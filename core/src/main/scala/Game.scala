@@ -39,7 +39,9 @@ abstract class AbstractGame extends Game {
       (gamePiece, gamePiece) match {
         case (stackable: QueuedMovement, movable: Movable) => {
 
-          if (stackable.movementQueue.size > 0) println(stackable.movementQueue)
+          //Prints moves that are to be played
+          if (!stackable.movementQueue.isEmpty)
+            println(gamePiece + " is moving " + stackable.movementQueue)
 
           stackable.movementQueue.headOption match {
             case Some(direction) => {

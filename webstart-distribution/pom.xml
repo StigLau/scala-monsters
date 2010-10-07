@@ -42,7 +42,7 @@
                 </executions>
                 <configuration>
                     <jnlp>
-                        <mainClass>no.lau.domain.UI</mainClass>
+                        <mainClass>no.lau.monsters.MonsterGameUI</mainClass>
                     </jnlp>
                     <outputJarVersions>false</outputJarVersions>
                     <pack200>false</pack200>

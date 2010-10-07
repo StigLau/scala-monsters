@@ -1,4 +1,4 @@
-package no.lau.domain
+package no.lau.monsters
 
 import scala.swing._
 import javax.swing.{InputMap, JComponent, KeyStroke, ActionMap}
@@ -11,7 +11,9 @@ import java.awt.{Dimension, Font}
  * @author: StigLau
  */
 
-object UI extends SimpleSwingApplication {
+object MonsterGameUI extends SimpleSwingApplication {
+  import no.lau.domain._
+
    def top = new MainFrame {
      size = new Dimension(400, 300)
      contents = new BorderPanel {
