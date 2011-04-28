@@ -6,7 +6,7 @@ class ScalaMonstersProject(info: ProjectInfo) extends ParentProject(info)
   val mavenLocal = "Local Maven Repository" at "file://" + Path.userHome + "/.m2/repository"
 
   trait MavenFriendly extends DefaultProject {
-    val junitInterface = "com.novocode" %% "junit-interface" % "0.4.0" from "http://github.com/downloads/bryanjswift/junit-interface/junit-interface-0.4.0.jar"
+	val junitInterface = "com.novocode" % "junit-interface" % "0.6" % "test->default"
 
     override def testFrameworks = super.testFrameworks ++ List(new TestFramework("com.novocode.junit.JUnitFrameworkNoMarker"))
     val scala_swing = "org.scala-lang" % "scala-swing" % "2.8.0"
