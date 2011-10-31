@@ -41,7 +41,7 @@ trait Movable extends GamePiece {
   private def move(oldLocation: Location, newLocation: Location) {
     game.currentGameBoard -= oldLocation
     game.currentGameBoard += newLocation -> this
-  } 
+  }
 
   def whereAreYou = game.whereIs(this, game.previousGameBoard)
 }

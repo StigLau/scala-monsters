@@ -12,7 +12,7 @@ class ScalaMonstersProject(info: ProjectInfo) extends ParentProject(info)
     val scala_swing = "org.scala-lang" % "scala-swing" % "2.8.0"
     val scalatest = "org.scalatest" % "scalatest" % "1.2"
   }
-  
+
   lazy val core = project("core", "scala-monsters-core", new DefaultProject(_) with MavenFriendly {val junit = "junit" % "junit" % "4.8.1"})
   lazy val simpleGui = project("simple-gui", "scala-monsters-simple-gui", new DefaultProject(_) with MavenFriendly, core)
 
