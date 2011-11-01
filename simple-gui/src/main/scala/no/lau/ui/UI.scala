@@ -7,7 +7,7 @@ import no.lau.predefined.{LevelEasyE, LevelEasyC, LevelEasyB, Config}
 import java.awt.{Dimension, Font}
 
 /**
- * @author: beiske                     
+ * @author: beiske
  * @author: StigLau
  */
 

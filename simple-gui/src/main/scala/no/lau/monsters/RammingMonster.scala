@@ -45,5 +45,5 @@ trait SimpleMonsterAI extends QueuedMovement with TickListener {
   }
 }
 
-class RammingMonster(game: Game) extends Monster(game) with SimpleMonsterAI with Meelee with Mortal 
+class RammingMonster(game: Game) extends Monster(game) with SimpleMonsterAI with Meelee with Mortal
 
