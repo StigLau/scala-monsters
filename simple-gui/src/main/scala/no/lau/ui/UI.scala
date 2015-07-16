@@ -8,7 +8,7 @@ import java.awt.{Dimension, Font}
 
 /**
  * @author: beiske
- * @author: StigLau
+ * @author: stig@lau.no
  */
 
 object MonsterGameUI extends SimpleSwingApplication {
