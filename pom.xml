@@ -31,7 +31,7 @@
     </modules>
 
     <properties>
-        <scala.version>2.10.4</scala.version>
+        <scala.version>2.10.7</scala.version>
     </properties>
 
     <dependencyManagement>
